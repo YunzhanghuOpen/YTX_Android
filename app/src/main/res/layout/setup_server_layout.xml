@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/navpage"
+    android:orientation="vertical" >
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+
+
+
+
+
+    <com.yuntongxun.ecdemo.common.base.CCPClearEditText
+        android:id="@+id/setup_name"
+        style="@style/CCPLineEditText"
+        android:layout_marginTop="@dimen/NormalPadding"
+        android:background="@drawable/edittext_bg_selector"
+        android:hint="@string/setup_name"
+        android:paddingLeft="10.0dip"
+        android:paddingRight="10.0dip"
+        android:singleLine="true" />
+    
+     <com.yuntongxun.ecdemo.common.base.CCPClearEditText
+            android:id="@+id/setup_connect"
+            style="@style/CCPLineEditText"
+            android:layout_marginTop="@dimen/NormalPadding"
+            android:background="@drawable/edittext_bg_selector"
+            android:hint="@string/setup_connect"
+            android:paddingLeft="10.0dip"
+            android:paddingRight="10.0dip"
+            android:singleLine="true" />
+     <com.yuntongxun.ecdemo.common.base.CCPClearEditText
+            android:id="@+id/setup_connect_port"
+            style="@style/CCPLineEditText"
+            android:layout_marginTop="@dimen/NormalPadding"
+            android:background="@drawable/edittext_bg_selector"
+            android:text="8085"
+            android:paddingLeft="10.0dip"
+            android:paddingRight="10.0dip"
+            android:singleLine="true" />
+     <com.yuntongxun.ecdemo.common.base.CCPClearEditText
+            android:id="@+id/setup_lvs"
+            style="@style/CCPLineEditText"
+            android:layout_marginTop="@dimen/NormalPadding"
+            android:background="@drawable/edittext_bg_selector"
+            android:hint="@string/setup_lvs"
+            android:paddingLeft="10.0dip"
+            android:paddingRight="10.0dip"
+            android:singleLine="true" />
+     <com.yuntongxun.ecdemo.common.base.CCPClearEditText
+            android:id="@+id/setup_lvs_port"
+            style="@style/CCPLineEditText"
+            android:layout_marginTop="@dimen/NormalPadding"
+            android:background="@drawable/edittext_bg_selector"
+             android:text="8888"
+            android:paddingLeft="10.0dip"
+            android:paddingRight="10.0dip"
+            android:singleLine="true" />
+     <com.yuntongxun.ecdemo.common.base.CCPClearEditText
+            android:id="@+id/setup_fileserver"
+            style="@style/CCPLineEditText"
+            android:layout_marginTop="@dimen/NormalPadding"
+            android:background="@drawable/edittext_bg_selector"
+            android:hint="@string/setup_File"
+            android:paddingLeft="10.0dip"
+            android:paddingRight="10.0dip"
+            android:singleLine="true" />
+     <com.yuntongxun.ecdemo.common.base.CCPClearEditText
+            android:id="@+id/setup_fileserver_port"
+            style="@style/CCPLineEditText"
+            android:layout_marginTop="@dimen/NormalPadding"
+            android:background="@drawable/edittext_bg_selector"
+           android:text="8090"
+            android:paddingLeft="10.0dip"
+            android:paddingRight="10.0dip"
+            android:singleLine="true" />
+     <com.yuntongxun.ecdemo.common.base.CCPClearEditText
+            android:id="@+id/setup_appid"
+            style="@style/CCPLineEditText"
+            android:layout_marginTop="@dimen/NormalPadding"
+            android:background="@drawable/edittext_bg_selector"
+            android:hint="@string/setup_appid"
+            android:paddingLeft="10.0dip"
+            android:paddingRight="10.0dip"
+            android:singleLine="true" />
+     <com.yuntongxun.ecdemo.common.base.CCPClearEditText
+            android:id="@+id/setup_apptoken"
+            style="@style/CCPLineEditText"
+            android:layout_marginTop="@dimen/NormalPadding"
+            android:background="@drawable/edittext_bg_selector"
+            android:hint="@string/setup_apptoken"
+            android:paddingLeft="10.0dip"
+            android:paddingRight="10.0dip"
+            android:singleLine="true" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_margin="5dip"
+        android:layout_height="wrap_content">
+       <Button
+           android:id="@+id/set_ip_button"
+           android:layout_marginLeft="4dip"
+           android:layout_width="wrap_content"
+           android:layout_marginRight="10dp"
+           style="@style/CCPBigRedButton"
+           android:layout_marginTop="5dp"
+           android:text="设置ip" />
+       <Button
+           android:id="@+id/set_app_button"
+           android:layout_width="wrap_content"
+           android:layout_marginLeft="4dp"
+           android:layout_marginRight="10dp"
+           style="@style/CCPBigRedButton"
+           android:layout_marginTop="5dp"
+           android:text="设置appid" />
+
+        <Button
+            android:id="@+id/set_all_button"
+            android:layout_marginLeft="10dip"
+            android:layout_width="wrap_content"
+            android:layout_marginRight="4dp"
+            style="@style/CCPBigRedButton"
+            android:layout_marginTop="5dp"
+            android:text="设置全部" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="10dp"
+        android:layout_margin="5dip"
+        android:layout_height="wrap_content">
+       <Button
+           android:id="@+id/bu_add_setupserver"
+           android:layout_marginLeft="10dip"
+           android:layout_width="wrap_content"
+           android:layout_marginRight="10dp"
+           style="@style/CCPBigRedButton"
+           android:layout_marginTop="5dp"
+           android:text="添加列表" />
+       <Button
+           android:id="@+id/bu_query_serverlist"
+           android:layout_width="wrap_content"
+           android:layout_marginLeft="4dp"
+           android:layout_marginRight="10dp"
+           style="@style/CCPBigRedButton"
+           android:layout_marginTop="5dp"
+           android:text="查询列表" />
+       <Button
+           android:id="@+id/bu_modify_item"
+           android:layout_width="wrap_content"
+           android:layout_marginLeft="4dp"
+           android:layout_marginRight="2dp"
+           style="@style/CCPBigRedButton"
+           android:layout_marginTop="5dp"
+           android:visibility="invisible"
+           android:text="保存" />
+    </LinearLayout>
+
+
+    </LinearLayout>
+    </ScrollView>
+
+
+</LinearLayout>

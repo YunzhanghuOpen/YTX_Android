@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+   Copyright (c) 2013 The CCP project authors. All Rights Reserved.
+ 
+   Use of this source code is governed by a Beijing Speedtong Information Technology Co.,Ltd license
+   that can be found in the LICENSE file in the root of the web site.
+ 
+    				http://www.yuntongxun.com
+ 
+   An additional intellectual property rights grant can be found
+   in the file PATENTS.  All contributing project authors may
+   be found in the AUTHORS file in the root of the source tree.
+ -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:emojicon="http://schemas.android.com/apk/res-auto"
+    style="@style/ChattingUIContent"
+    android:layout_below="@+id/chatting_time_tv" >
+
+    <include layout="@layout/chatting_item_avatar_from" />
+
+    <RelativeLayout
+        android:layout_width="180dip"
+        android:layout_height="120dip"
+        android:clickable="true"
+        android:id="@+id/re_location"
+        android:maxWidth="240dip"
+        android:background="@drawable/chatfrom_bg"
+        android:maxHeight="160dip"
+         >
+
+        <TextView
+            android:id="@+id/chatting_user_tv"
+            style="@style/ChattingUISenderText"
+            android:visibility="gone" />
+
+        <com.yuntongxun.ecdemo.ui.chatting.base.EmojiconTextView
+            android:id="@+id/tv_location"
+            style="@style/ChattingUIText"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:layout_alignParentTop="true"
+            android:textColor="@color/white"
+            emojicon:emojiconSize="@dimen/text_list_title"
+             />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_below="@id/tv_location"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            android:layout_alignParentBottom="true"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_width="60dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/attachment"
+                android:layout_alignParentBottom="true"
+                android:maxHeight="100dp"
+                android:maxWidth="100dp"
+                android:id="@+id/iv_rich"
+                android:layout_height="60dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_toRightOf="@id/iv_rich"
+                android:layout_marginLeft="5dp"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:id="@+id/tv_pre_content"
+                android:layout_height="wrap_content" />
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+</LinearLayout>

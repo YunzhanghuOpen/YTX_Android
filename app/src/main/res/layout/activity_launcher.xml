@@ -1,0 +1,28 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:id="@+id/container"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    tools:context=".LauncherActivity" tools:ignore="MergeRootFrame" >
+
+    <VideoView
+        android:layout_width="wrap_content"
+        android:layout_height="92dp"
+        android:id="@+id/videoView"
+        android:layout_gravity="left|top" />
+
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/editText"
+        android:layout_gravity="right|bottom" />
+
+
+    <view
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        class="android.support.v7.internal.view.menu.ListMenuItemView"
+        android:id="@+id/view"
+        android:layout_gravity="center_horizontal|top" />
+</FrameLayout>

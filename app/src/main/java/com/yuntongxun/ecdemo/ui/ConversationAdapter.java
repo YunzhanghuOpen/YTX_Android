@@ -19,7 +19,6 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.text.Html;
-import android.text.Spanned;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -130,6 +129,14 @@ public class ConversationAdapter extends CCPListAdapter <Conversation> {
                     fromNickName = contact.getNickname() + ": ";
                 } else {
                     fromNickName = conversation.getContactId() + ": ";
+                }
+            }
+            //用字符串的方式的识别红包消息，改变会话页显示样式
+            if (conversation.getMsgType() == ECMessage.Type.TXT.ordinal()) {
+                String content = conversation.getContent();
+                if ((content.contains("领取了") && content.contains("的红包")) || content.contains("红包消息")|| content.contains("容联云红包")) {
+
+                    fromNickName = "";
                 }
             }
         }

@@ -31,7 +31,6 @@ import android.text.Editable;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -78,6 +77,7 @@ import com.yuntongxun.ecdemo.ui.chatting.base.OnListViewBottomListener;
 import com.yuntongxun.ecdemo.ui.chatting.base.OnListViewTopListener;
 import com.yuntongxun.ecdemo.ui.chatting.base.OnRefreshAdapterDataListener;
 import com.yuntongxun.ecdemo.ui.chatting.model.ImgInfo;
+import com.yuntongxun.ecdemo.ui.chatting.redpacketutils.RedPacketUtil;
 import com.yuntongxun.ecdemo.ui.chatting.view.CCPChattingFooter2;
 import com.yuntongxun.ecdemo.ui.chatting.view.SmileyPanel;
 import com.yuntongxun.ecdemo.ui.contact.AtSomeoneUI;
@@ -90,7 +90,6 @@ import com.yuntongxun.ecsdk.ECChatManager;
 import com.yuntongxun.ecsdk.ECChatManager.OnChangeVoiceListener;
 import com.yuntongxun.ecsdk.ECDevice;
 import com.yuntongxun.ecsdk.ECError;
-import com.yuntongxun.ecsdk.ECGroupManager;
 import com.yuntongxun.ecsdk.ECMessage;
 import com.yuntongxun.ecsdk.ECUserState;
 import com.yuntongxun.ecsdk.ECVoIPCallManager.CallType;
@@ -98,7 +97,6 @@ import com.yuntongxun.ecsdk.Parameters;
 import com.yuntongxun.ecsdk.SdkErrorCode;
 import com.yuntongxun.ecsdk.im.ECFileMessageBody;
 import com.yuntongxun.ecsdk.im.ECGroup;
-import com.yuntongxun.ecsdk.im.ECGroupMember;
 import com.yuntongxun.ecsdk.im.ECImageMessageBody;
 import com.yuntongxun.ecsdk.im.ECLocationMessageBody;
 import com.yuntongxun.ecsdk.im.ECPreviewMessageBody;
@@ -107,11 +105,7 @@ import com.yuntongxun.ecsdk.im.ECUserStateMessageBody;
 import com.yuntongxun.ecsdk.im.ECVideoMessageBody;
 import com.yuntongxun.ecsdk.im.ECVoiceMessageBody;
 import com.yuntongxun.ecsdk.platformtools.ECHandlerHelper;
-import com.yunzhanghu.redpacketsdk.RPGroupMemberListener;
 import com.yunzhanghu.redpacketsdk.RPSendPacketCallback;
-import com.yunzhanghu.redpacketsdk.RPValueCallback;
-import com.yunzhanghu.redpacketsdk.RedPacket;
-import com.yunzhanghu.redpacketsdk.bean.RPUserBean;
 import com.yunzhanghu.redpacketsdk.bean.RedPacketInfo;
 import com.yunzhanghu.redpacketsdk.constant.RPConstant;
 import com.yunzhanghu.redpacketui.utils.RPRedPacketUtil;
@@ -745,56 +739,8 @@ public class ChattingFragment extends CCPFragment implements
                     getTopBarView().setTitle(charSequence);
                 }
             }
-            ECGroupManager groupManager = ECDevice.getECGroupManager();
-            // 调用获取群组成员接口，设置结果回调
-            groupManager.queryGroupMembers(ecGroup.getGroupId(),
-                    new ECGroupManager.OnQueryGroupMembersListener() {
-                        @Override
-                        public void onQueryGroupMembersComplete(ECError error
-                                , final List members) {
-                            if (error.errorCode == SdkErrorCode.REQUEST_SUCCESS
-                                    && members != null) {
-                                // 获取群组成员成功
-                                // 将群组成员信息更新到本地缓存中（sqlite） 通知UI更新
-
-                                RedPacket.getInstance().setRPGroupMemberListener(new RPGroupMemberListener() {
-                                    @Override
-                                    public void getGroupMember(String s, RPValueCallback<List<RPUserBean>> rpValueCallback) {
-                                        List<RPUserBean> userBeanList = new ArrayList<RPUserBean>();
-
-                                        for (int i = 0; i < members.size(); i++) {
-                                            RPUserBean userBean = new RPUserBean();
-                                            ECGroupMember member = (ECGroupMember) members.get(i);
-                                            userBean.userId = member.getVoipAccount();
-                                            if (userBean.userId.equals(CCPAppManager.getUserId())) {
-                                                continue;
-                                            }
-
-                                            if (member != null) {
-                                                userBean.userAvatar = "none";
-                                                userBean.userNickname = TextUtils.isEmpty(member.getDisplayName()) ? member.getVoipAccount() : member.getDisplayName();
-                                            } else {
-                                                userBean.userNickname = userBean.userId;
-                                                userBean.userAvatar = "none";
-                                            }
-                                            userBeanList.add(userBean);
-                                        }
-                                        rpValueCallback.onSuccess(userBeanList);
-                                    }
-
-                                });
-
-
-                                return;
-                            }
-                            // 群组成员获取失败
-                            Log.e("ECSDK_Demo", "sync group detail fail " +
-                                    ", errorCode=" + error.errorCode);
-
-                        }
-
-                    }
-            );
+            //增加专属红包
+            RedPacketUtil.getInstance().setGroupMember(ecGroup.getGroupId());
         }
     }
 
@@ -2464,6 +2410,7 @@ public class ChattingFragment extends CCPFragment implements
         @Override
         public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
             final int itemPosition = position;
+
             if (mChattingAdapter != null) {
                 int headerViewsCount = mListView.getHeaderViewsCount();
                 if (itemPosition < headerViewsCount) {

@@ -43,5 +43,4 @@ dependencies {
     compile files('libs/Yuntx_FullLib_v5.3.1r.jar')
     compile project(':BQMM_Lib')
     compile project(':redpacketlibrary')
-    //compile 'org.apache.httpcomponents:httpclient-android:4.3.5.1'
 }

@@ -26,7 +26,6 @@ import com.yuntongxun.ecdemo.common.base.CCPFlipper;
 import com.yuntongxun.ecdemo.common.utils.DensityUtil;
 import com.yuntongxun.ecdemo.common.utils.LogUtil;
 import com.yuntongxun.ecdemo.ui.chatting.AppPanelControl;
-import com.yuntongxun.ecsdk.ECDevice;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -406,7 +405,5 @@ public class AppPanel extends LinearLayout implements CCPFlipper.OnFlipperPageLi
     	void OnSelectFireMsgClick();
     	void OnSelectFireLocationClick();
 		void OnSelectRedPacketClick();
-    	
-    	
 	}
 }

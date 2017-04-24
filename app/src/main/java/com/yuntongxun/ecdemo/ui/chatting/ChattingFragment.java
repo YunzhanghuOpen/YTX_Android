@@ -1759,7 +1759,7 @@ public class ChattingFragment extends CCPFragment implements
         @Override
         public void OnSelectRedPacketRequest() {//红包
 
-            int type = RPConstant.RP_ITEM_TYPE_SINGLE;
+            int type;
             RedPacketInfo redPacketInfo = new RedPacketInfo();
             if (!isPeerChat()) {
                 //但来哦传递参数接收者ID，头像，昵称
@@ -1789,6 +1789,25 @@ public class ChattingFragment extends CCPFragment implements
             });
             hideBottomPanel();
 
+        }
+
+        @Override
+        public void OnSelectTransferRequest() {
+            RedPacketInfo redPacketInfo = new RedPacketInfo();
+            redPacketInfo.toUserId = mRecipients;
+            redPacketInfo.toNickName = mUsername;
+            redPacketInfo.toAvatarUrl = "none";//容联云没有头像url，开发者设置自己app的头像url
+            RPRedPacketUtil.getInstance().startRedPacket(getActivity(), RPConstant.RP_ITEM_TYPE_TRANSFER, redPacketInfo, new RPSendPacketCallback() {
+                @Override
+                public void onSendPacketSuccess(RedPacketInfo redPacketInfo) {
+                    handleSendTransferMessage(redPacketInfo);
+                }
+
+                @Override
+                public void onGenerateRedPacketId(String s) {
+
+                }
+            });
         }
 
     }
@@ -2741,6 +2760,45 @@ public class ChattingFragment extends CCPFragment implements
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    /**
+     * 发送转账消息
+     */
+    private void handleSendTransferMessage(RedPacketInfo data) {
+        try {
+            String money = data.redPacketAmount;
+            String time = data.transferTime;
+            String transfer = getResources().getString(R.string.attach_transfer);
+            String text = "[" + transfer + "]" + transfer + money + "元";
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put(RPConstant.MESSAGE_ATTR_IS_TRANSFER_PACKET_MESSAGE, true);//是否是转账消息
+            jsonObject.put(RPConstant.EXTRA_TRANSFER_AMOUNT, money);//转账金额
+            jsonObject.put(RPConstant.EXTRA_TRANSFER_PACKET_TIME, time);//转账时间
+            // 组建一个待发送的ECMessage
+            ECMessage msg = ECMessage.createECMessage(ECMessage.Type.TXT);
+            // 设置消息接收者
+            msg.setTo(mRecipients);
+            msg.setUserData(jsonObject.toString());
+            // 创建一个文本消息体，并添加到消息对象中
+            ECTextMessageBody msgBody = new ECTextMessageBody(text.toString());
+            msg.setBody(msgBody);
+            String[] at = mChattingFooter.getAtSomeBody();
+            msgBody.setAtMembers(at);
+            mChattingFooter.clearSomeBody();
+            // 发送消息，该函数见上
+            long rowId;
+            if (mCustomerService) {
+                rowId = CustomerServiceHelper.sendMCMessage(msg);
+            } else {
+                rowId = IMChattingHelper.sendECMessage(msg);
+            }
+            // 通知列表刷新
+            msg.setId(rowId);
+            notifyIMessageListView(msg);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
 
 

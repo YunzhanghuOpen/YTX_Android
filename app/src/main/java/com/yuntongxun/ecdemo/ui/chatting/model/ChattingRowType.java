@@ -91,8 +91,12 @@ public enum ChattingRowType {
      * redpacket ack
      */
     REDPACKE_ROW_ACK_RECEIVED("C8000R", Integer.valueOf(18)),
-    REDPACKE_ROW_ACK_TO("C8000T", Integer.valueOf(19));
-
+    REDPACKE_ROW_ACK_TO("C8000T", Integer.valueOf(19)),
+    /**
+     * transfer
+     */
+    TRANSFER_ROW_RECEIVED("C9000R", Integer.valueOf(20)),
+    TRANSFER_ROW_TO("C9000T", Integer.valueOf(21));
 
     private final Integer mId;
     private final Object mDefaultValue;

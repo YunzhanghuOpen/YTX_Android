@@ -16,7 +16,6 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -24,13 +23,11 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.os.StatFs;
-import android.os.SystemClock;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -38,13 +35,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -75,7 +70,6 @@ import com.yuntongxun.ecdemo.common.utils.LogUtil;
 import com.yuntongxun.ecdemo.common.utils.ResourceHelper;
 import com.yuntongxun.ecdemo.common.utils.ToastUtil;
 import com.yuntongxun.ecdemo.ui.chatting.IMChattingHelper;
-import com.yuntongxun.ecdemo.ui.chatting.base.EmojiconEditText;
 import com.yuntongxun.ecdemo.ui.chatting.base.UnicodeToEmoji;
 import com.yuntongxun.ecdemo.ui.contact.ECContacts;
 
@@ -85,14 +79,13 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 
 /**
  * @author Jorstin Chan@容联•云通讯
- * @date 2014-12-10
  * @version 4.0
+ * @date 2014-12-10
  */
 public class CCPChattingFooter2 extends LinearLayout {
 
@@ -105,15 +98,15 @@ public class CCPChattingFooter2 extends LinearLayout {
     /**
      * 用于在消息的附加信息里表示表情文字
      */
-    public static final String EMOJI_TEXT="emoji_text";
+    public static final String EMOJI_TEXT = "emoji_text";
     /**
      * 用于在消息的附加信息里表示类型
      */
-    public static final String TXT_MSGTYPE="txt_msgType";
+    public static final String TXT_MSGTYPE = "txt_msgType";
     /**
      * 用于在消息的附加信息里表示信息的实际内容
      */
-    public static final String MSG_DATA="msg_data";
+    public static final String MSG_DATA = "msg_data";
 
     private static final String TAG = LogUtil.getLogUtilsTag(CCPChattingFooter2.class);
     private static final int WHAT_ON_DIMISS_DIALOG = 0x1;
@@ -263,7 +256,7 @@ public class CCPChattingFooter2 extends LinearLayout {
             popupWindow.dismiss();
             mVoiceRecord.setEnabled(true);
             mVoiceRecordBianSheng.setEnabled(true);
-            
+
         }
 
     };
@@ -274,7 +267,7 @@ public class CCPChattingFooter2 extends LinearLayout {
         @Override
         public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 
-            if(((actionId == EditorInfo.IME_NULL) && mDonotEnableEnterkey) || actionId == EditorInfo.IME_ACTION_SEND) {
+            if (((actionId == EditorInfo.IME_NULL) && mDonotEnableEnterkey) || actionId == EditorInfo.IME_ACTION_SEND) {
                 mChattingSend.performClick();
                 return true;
             }
@@ -288,15 +281,15 @@ public class CCPChattingFooter2 extends LinearLayout {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             hideBottomPanel();
-            if(mChattingFooterLinstener != null) {
+            if (mChattingFooterLinstener != null) {
                 mChattingFooterLinstener.OnInEditMode();
             }
             return false;
         }
 
     };
-    
-    public boolean isChangeVoice=false;
+
+    public boolean isChangeVoice = false;
 
     long currentTimeMillis = 0;
     final private OnTouchListener mOnVoiceRecTouchListener
@@ -304,61 +297,61 @@ public class CCPChattingFooter2 extends LinearLayout {
 
         @Override
         public boolean onTouch(View v, MotionEvent event) {
-        	
-        	 int buId= v.getId();
-        	 if(buId==R.id.voice_record_imgbtn){
-        		 isChangeVoice=false;
-        	 }else if(buId==R.id.voice_record_imgbtn_biansheng){
-        		 isChangeVoice=true;
-        	 }
-            if(getAvailaleSize() < 10) {
+
+            int buId = v.getId();
+            if (buId == R.id.voice_record_imgbtn) {
+                isChangeVoice = false;
+            } else if (buId == R.id.voice_record_imgbtn_biansheng) {
+                isChangeVoice = true;
+            }
+            if (getAvailaleSize() < 10) {
                 LogUtil.d(LogUtil.getLogUtilsTag(CCPChattingFooter2.class), "sdcard no memory ");
                 ToastUtil.showMessage(R.string.media_no_memory);
                 return false;
             }
             long time = System.currentTimeMillis() - currentTimeMillis;
-            if(time <= 300) {
+            if (time <= 300) {
                 LogUtil.d(LogUtil.getLogUtilsTag(CCPChattingFooter2.class), "Invalid click ");
                 currentTimeMillis = System.currentTimeMillis();
                 return false;
             }
 
-            if(!FileAccessor.isExistExternalStore()) {
+            if (!FileAccessor.isExistExternalStore()) {
                 ToastUtil.showMessage(R.string.media_ejected);
                 return false;
 
             }
 
             switch (event.getAction()) {
-                case  MotionEvent.ACTION_DOWN:
-                	isRecodering=true;
+                case MotionEvent.ACTION_DOWN:
+                    isRecodering = true;
                     mVoiceButtonTouched = true;
-                    animate(mVoiceRecord,true);
+                    animate(mVoiceRecord, true);
                     onPause();
                     LogUtil.d(LogUtil.getLogUtilsTag(CCPChattingFooter2.class), "CCPChatFooter voice recording action down");
-                    if(mChattingFooterLinstener != null) {
+                    if (mChattingFooterLinstener != null) {
                         mChattingFooterLinstener.OnVoiceRcdInitReuqest();
                     }
-                    
-                    if(isRecodering){
-                    	pageView.setEnabled(false);
-                    	pageView.setOnTouchListener(null);
-                    	if(isChangeVoice){
-                    		mVoiceRecordBianSheng.getParent().requestDisallowInterceptTouchEvent(true);
-                    	}else {
-                    		mVoiceRecord.getParent().requestDisallowInterceptTouchEvent(true);
-                    	}
-                    	return true;
+
+                    if (isRecodering) {
+                        pageView.setEnabled(false);
+                        pageView.setOnTouchListener(null);
+                        if (isChangeVoice) {
+                            mVoiceRecordBianSheng.getParent().requestDisallowInterceptTouchEvent(true);
+                        } else {
+                            mVoiceRecord.getParent().requestDisallowInterceptTouchEvent(true);
+                        }
+                        return true;
                     }
-                    
+
                     break;
 
                 case MotionEvent.ACTION_MOVE:
-                    if(popupWindow == null) {
+                    if (popupWindow == null) {
                         return false;
                     }
-                    LogUtil.e("bb","chat move");
-                    if(event.getX() <= 0.0F || event.getY() <= -CANCLE_DANSTANCE || event.getX() >= mVoiceRecord.getWidth()){
+                    LogUtil.e("bb", "chat move");
+                    if (event.getX() <= 0.0F || event.getY() <= -CANCLE_DANSTANCE || event.getX() >= mVoiceRecord.getWidth()) {
                         LogUtil.d(LogUtil.getLogUtilsTag(CCPChattingFooter2.class), "show cancel Tips");
                         mVoiceHintCancelText.setText(R.string.chatfooter_cancel_rcd_release);
                         mVoiceRcdHitCancelView.setVisibility(View.VISIBLE);
@@ -369,20 +362,20 @@ public class CCPChattingFooter2 extends LinearLayout {
                         mVoiceRcdHitCancelView.setVisibility(View.GONE);
                         mVoiceHintAnimArea.setVisibility(View.VISIBLE);
                     }
-                    if(isRecodering){
-                    	pageView.setEnabled(false);
-                    	pageView.setOnTouchListener(null);
-                    	if(isChangeVoice){
-                    		mVoiceRecordBianSheng.getParent().requestDisallowInterceptTouchEvent(true);
-                    	}else {
-                    		mVoiceRecord.getParent().requestDisallowInterceptTouchEvent(true);
-                    	}
-                    	return true;
+                    if (isRecodering) {
+                        pageView.setEnabled(false);
+                        pageView.setOnTouchListener(null);
+                        if (isChangeVoice) {
+                            mVoiceRecordBianSheng.getParent().requestDisallowInterceptTouchEvent(true);
+                        } else {
+                            mVoiceRecord.getParent().requestDisallowInterceptTouchEvent(true);
+                        }
+                        return true;
                     }
                     break;
                 case MotionEvent.ACTION_UP:
-                	animate(mVoiceRecord,false);
-                	isRecodering=false;
+                    animate(mVoiceRecord, false);
+                    isRecodering = false;
                     LogUtil.d(LogUtil.getLogUtilsTag(CCPChattingFooter2.class), "CCPChatFooter voice recording action up ");
                     resetVoiceRecordingButton();
                     break;
@@ -391,76 +384,72 @@ public class CCPChattingFooter2 extends LinearLayout {
             return false;
         }
     };
-    
-    public static boolean isRecodering=false;
-    
-    private void animate(ImageView imgView,boolean start )
-    {
-    	if(start){
+
+    public static boolean isRecodering = false;
+
+    private void animate(ImageView imgView, boolean start) {
+        if (start) {
 //    		imgView.setBackgroundResource(R.drawable.voicebtn_animation_list);
-    		imgView.setImageResource(R.drawable.ytx_voicebtn_animation_list);
-    	}
-    	Drawable drawable = imgView.getDrawable();
-    	if(!(drawable instanceof AnimationDrawable)){
-    		LogUtil.e(TAG, "animate() !(drawable instanceof AnimationDrawable");
-    		return;
-    	}
-    	 AnimationDrawable frameAnimation = 
-    		 (AnimationDrawable) drawable/*imgView.getDrawable()*/;
+            imgView.setImageResource(R.drawable.ytx_voicebtn_animation_list);
+        }
+        Drawable drawable = imgView.getDrawable();
+        if (!(drawable instanceof AnimationDrawable)) {
+            LogUtil.e(TAG, "animate() !(drawable instanceof AnimationDrawable");
+            return;
+        }
+        AnimationDrawable frameAnimation =
+                (AnimationDrawable) drawable/*imgView.getDrawable()*/;
 
-    	 if (frameAnimation.isRunning())
-    	 {
-    		 if(!start)
-        	 frameAnimation.stop();
-    	 }
-    	 else
-    	 {
-    		 if(start){
-    			 frameAnimation.stop();
-    			 frameAnimation.start();
-    		 }
-    	 }
-    	 if(!start){
-    		 imgView.setImageResource(R.drawable.voice_push_button);
-    	 }
-    	 
+        if (frameAnimation.isRunning()) {
+            if (!start)
+                frameAnimation.stop();
+        } else {
+            if (start) {
+                frameAnimation.stop();
+                frameAnimation.start();
+            }
+        }
+        if (!start) {
+            imgView.setImageResource(R.drawable.voice_push_button);
+        }
+
     }
-    
-    final OnClickListener mChangeVoiceClickListener =new OnClickListener() {
-		
-		@Override
-		public void onClick(View v) {
 
-			switch (v.getId()) {
-			case R.id.layout_cancel_changevoice:
-				
-				llBianSheng.setVisibility(View.GONE);
-				pageView.setVisibility(View.VISIBLE);
-				break;
-			case R.id.layout_send_changevoice:
-				
-				mTextPanel.setVisibility(View.VISIBLE);
-				setChattingModeImageResource(R.drawable.chatting_setmode_keyboard_btn);
-				llBianSheng.setVisibility(View.GONE);
-				pageView.setVisibility(View.VISIBLE);
-				ll_voice_area.setVisibility(View.GONE);
-				
-				if(bianShengPosition==0){
-					mChattingFooterLinstener.sendChangeVoiceMsg(true);
-				}else {
-					mChattingFooterLinstener.sendChangeVoiceMsg(false);
-				}
-				break;
+    final OnClickListener mChangeVoiceClickListener = new OnClickListener() {
 
-			default:
-				break;
-			}
-			if(mChattingFooterLinstener!=null){
-				mChattingFooterLinstener.stopVoicePlay();
-			}
-			
-		}
-	};
+        @Override
+        public void onClick(View v) {
+
+            switch (v.getId()) {
+                case R.id.layout_cancel_changevoice:
+
+                    llBianSheng.setVisibility(View.GONE);
+                    pageView.setVisibility(View.VISIBLE);
+                    break;
+                case R.id.layout_send_changevoice:
+
+                    mTextPanel.setVisibility(View.VISIBLE);
+                    setChattingModeImageResource(R.drawable.chatting_setmode_keyboard_btn);
+                    llBianSheng.setVisibility(View.GONE);
+                    pageView.setVisibility(View.VISIBLE);
+                    ll_voice_area.setVisibility(View.GONE);
+
+                    if (bianShengPosition == 0) {
+                        mChattingFooterLinstener.sendChangeVoiceMsg(true);
+                    } else {
+                        mChattingFooterLinstener.sendChangeVoiceMsg(false);
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+            if (mChattingFooterLinstener != null) {
+                mChattingFooterLinstener.stopVoicePlay();
+            }
+
+        }
+    };
 
     final private OnClickListener mChattingSendClickListener
             = new OnClickListener() {
@@ -470,13 +459,13 @@ public class CCPChattingFooter2 extends LinearLayout {
             LogUtil.d(TAG, "send msg onClick");
             String message = mEditText.getText().toString();
 
-            if((message.trim().length() == 0) && message.length() != 0) {
+            if ((message.trim().length() == 0) && message.length() != 0) {
                 LogUtil.d(TAG, "empty message cant be sent");
                 return;
             }
 
             // send.
-            if(mChattingFooterLinstener != null) {
+            if (mChattingFooterLinstener != null) {
                 mChattingFooterLinstener.OnSendTextMessageRequest(message);
             }
 
@@ -494,12 +483,12 @@ public class CCPChattingFooter2 extends LinearLayout {
             switch (event.getAction()) {
                 case KeyEvent.ACTION_DOWN:
 
-                    if((keyCode != KeyEvent.KEYCODE_DPAD_CENTER && keyCode != KeyEvent.KEYCODE_ENTER)) {
+                    if ((keyCode != KeyEvent.KEYCODE_DPAD_CENTER && keyCode != KeyEvent.KEYCODE_ENTER)) {
                     }
                     break;
                 case KeyEvent.ACTION_UP:
 
-                    if((keyCode != KeyEvent.KEYCODE_DPAD_CENTER && keyCode != KeyEvent.KEYCODE_ENTER)) {
+                    if ((keyCode != KeyEvent.KEYCODE_DPAD_CENTER && keyCode != KeyEvent.KEYCODE_ENTER)) {
                     }
                     break;
                 default:
@@ -539,13 +528,13 @@ public class CCPChattingFooter2 extends LinearLayout {
         @Override
         public void onClick(View v) {
 
-            if(isButtomPanelNotVisibility()) {
+            if (isButtomPanelNotVisibility()) {
                 hideInputMethod();
                 //setMode(0, -1, true);
-                if(mAppPanel == null) {
+                if (mAppPanel == null) {
                     initAppPanel();
                 }
-                if(bqmmKeyboard.getVisibility() == View.VISIBLE) {
+                if (bqmmKeyboard.getVisibility() == View.VISIBLE) {
                     bqmmKeyboard.setVisibility(View.GONE);
                     bqmmKeyboard.hideKeyboard();
                 }
@@ -560,7 +549,7 @@ public class CCPChattingFooter2 extends LinearLayout {
                 //mAppPanel.refreshAppPanel();
             } else {
                 //setMode(CHATTING_MODE_VOICE, 22, true);
-                if(bqmmKeyboard.getVisibility() == View.VISIBLE) {
+                if (bqmmKeyboard.getVisibility() == View.VISIBLE) {
                     bqmmKeyboard.setVisibility(View.GONE);
                     bqmmKeyboard.hideKeyboard();
                     mAppPanel.setVisibility(View.VISIBLE);
@@ -580,55 +569,55 @@ public class CCPChattingFooter2 extends LinearLayout {
 
         @Override
         public void OnTakingPictureClick() {
-            if(mChattingPanelClickListener != null) {
+            if (mChattingPanelClickListener != null) {
                 mChattingPanelClickListener.OnTakingPictureRequest();
             }
         }
 
         @Override
         public void OnSelectImageClick() {
-            if(mChattingPanelClickListener != null) {
+            if (mChattingPanelClickListener != null) {
                 mChattingPanelClickListener.OnSelectImageReuqest();
             }
         }
 
         @Override
         public void OnSelectFileClick() {
-            if(mChattingPanelClickListener != null) {
+            if (mChattingPanelClickListener != null) {
                 mChattingPanelClickListener.OnSelectFileRequest();
             }
         }
 
-		@Override
-		public void OnSelectVoiceClick() {
-			if(mChattingPanelClickListener != null) {
+        @Override
+        public void OnSelectVoiceClick() {
+            if (mChattingPanelClickListener != null) {
                 mChattingPanelClickListener.OnSelectVoiceRequest();
             }
-		}
+        }
 
-		@Override
-		public void OnSelectVideoClick() {
-			if(mChattingPanelClickListener != null) {
+        @Override
+        public void OnSelectVideoClick() {
+            if (mChattingPanelClickListener != null) {
                 mChattingPanelClickListener.OnSelectVideoRequest();
             }
-		}
+        }
 
-		@Override
-		public void OnSelectFireMsgClick() {
+        @Override
+        public void OnSelectFireMsgClick() {
 
-			if(mChattingPanelClickListener != null) {
+            if (mChattingPanelClickListener != null) {
                 mChattingPanelClickListener.OnSelectFireMsg();
             }
-		}
+        }
 
-		@Override
-		public void OnSelectFireLocationClick() {
-			// TODO Auto-generated method stub
-			if(mChattingPanelClickListener != null) {
+        @Override
+        public void OnSelectFireLocationClick() {
+            // TODO Auto-generated method stub
+            if (mChattingPanelClickListener != null) {
                 mChattingPanelClickListener.OnSelectLocationRequest();
             }
-			
-		}
+
+        }
 
         @Override
         public void OnSelectRedPacketClick() {
@@ -639,6 +628,13 @@ public class CCPChattingFooter2 extends LinearLayout {
 
         }
 
+        @Override
+        public void OnSelectTransferClick() {
+            if (mChattingPanelClickListener != null) {
+                mChattingPanelClickListener.OnSelectTransferRequest();
+            }
+        }
+
 
     };
 
@@ -647,7 +643,7 @@ public class CCPChattingFooter2 extends LinearLayout {
      * @param context
      */
     public CCPChattingFooter2(Context context) {
-        this(context , null);
+        this(context, null);
     }
 
     /**
@@ -655,7 +651,7 @@ public class CCPChattingFooter2 extends LinearLayout {
      * @param attrs
      */
     public CCPChattingFooter2(Context context, AttributeSet attrs) {
-        this(context, attrs ,0);
+        this(context, attrs, 0);
     }
 
     /**
@@ -669,23 +665,23 @@ public class CCPChattingFooter2 extends LinearLayout {
         mInputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         initChatFooter(context);
     }
-    
+
     private View ll_voice_area;
     private Chronometer mChronometer;
-    
 
-	private PageView pageView;
-	private ImageButton mVoiceRecordBianSheng;
-	private Chronometer mChronometerBianSheng;
-	private LinearLayout llBianSheng;
-	private GridView gvChangeVoice;
 
-    private  OnFocusChangeListener onFocusChangeListener =new OnFocusChangeListener() {
+    private PageView pageView;
+    private ImageButton mVoiceRecordBianSheng;
+    private Chronometer mChronometerBianSheng;
+    private LinearLayout llBianSheng;
+    private GridView gvChangeVoice;
+
+    private OnFocusChangeListener onFocusChangeListener = new OnFocusChangeListener() {
         @Override
         public void onFocusChange(View v, boolean hasFocus) {
 
-            Intent intent =new Intent();
-            intent.putExtra("hasFoucs",hasFocus);
+            Intent intent = new Intent();
+            intent.putExtra("hasFoucs", hasFocus);
             intent.setAction(IMChattingHelper.INTENT_ACTION_CHAT_EDITTEXT_FOUCU);
             CCPAppManager.getContext().sendBroadcast(intent);
 
@@ -702,7 +698,7 @@ public class CCPChattingFooter2 extends LinearLayout {
         mEditText = ((BQMMEditView) findViewById(R.id.chatting_content_et));
         mEditText.setOnFocusChangeListener(onFocusChangeListener);
         mTextPanel = ((LinearLayout) findViewById(R.id.text_panel_ll));
-        mChattingBottomPanel = ((FrameLayout)findViewById(R.id.chatting_bottom_panel));
+        mChattingBottomPanel = ((FrameLayout) findViewById(R.id.chatting_bottom_panel));
         mChattingAttach = ((ImageButton) findViewById(R.id.chatting_attach_btn));
         mChattingSend = ((BQMMSendButton) findViewById(R.id.chatting_send_btn));
         mChattingModeButton = ((ImageButton) findViewById(R.id.chatting_mode_btn));
@@ -711,37 +707,35 @@ public class CCPChattingFooter2 extends LinearLayout {
         mAtSomeone = new ArrayList<ECContacts>();
         enableChattingSend(false);
         resetEnableEnterkey();
-        
+
         ll_voice_area = findViewById(R.id.ll_voice_area);
-        
+
         gvChangeVoice = (GridView) findViewById(R.id.gv_change_voice);
-        
+
         gvChangeVoice.setAdapter(changeVoiceAdapter);
-        
+
         gvChangeVoice.setOnItemClickListener(onItemClickListener);
-        
+
         llBianSheng = (LinearLayout) findViewById(R.id.ll_biansheng_contain);
-        
-        
+
+
         pageView = (PageView) findViewById(R.id.chat_voice_panle);
-        View normalLayout=	View.inflate(getContext(), R.layout.chat_voice_normal, null);
-        View bianshengLayout=	View.inflate(getContext(), R.layout.chat_voice_biansheng, null);
-        
-        pageView.addPage(normalLayout,0);
-        pageView.addPage(bianshengLayout,1);
-        
-        
-        
-        
+        View normalLayout = View.inflate(getContext(), R.layout.chat_voice_normal, null);
+        View bianshengLayout = View.inflate(getContext(), R.layout.chat_voice_biansheng, null);
+
+        pageView.addPage(normalLayout, 0);
+        pageView.addPage(bianshengLayout, 1);
+
+
         tvCancel = (TextView) findViewById(R.id.layout_cancel_changevoice);
         tvSend = (TextView) findViewById(R.id.layout_send_changevoice);
-        
+
         tvCancel.setOnClickListener(mChangeVoiceClickListener);
         tvSend.setOnClickListener(mChangeVoiceClickListener);
-        
+
         mChronometer = ((Chronometer) findViewById(R.id.chronometer));
         mChronometerBianSheng = ((Chronometer) findViewById(R.id.chronometer_biansheng));
-        
+
         mVoiceRecord = ((ImageButton) findViewById(R.id.voice_record_imgbtn));
         mVoiceRecordBianSheng = ((ImageButton) findViewById(R.id.voice_record_imgbtn_biansheng));
         mChattingModeButton = ((ImageButton) findViewById(R.id.chatting_mode_btn));
@@ -752,7 +746,7 @@ public class CCPChattingFooter2 extends LinearLayout {
         mChattingSend.setOnClickListener(mChattingSendClickListener);
         mVoiceRecord.setOnTouchListener(mOnVoiceRecTouchListener);
         mVoiceRecord.setOnKeyListener(mVoiceButtonKeyListener);
-        
+
         mVoiceRecordBianSheng.setOnTouchListener(mOnVoiceRecTouchListener);
         mVoiceRecordBianSheng.setOnKeyListener(mVoiceButtonKeyListener);
         mChattingModeButton.setOnClickListener(mChattingModeClickListener);
@@ -793,7 +787,7 @@ public class CCPChattingFooter2 extends LinearLayout {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                BQMM.getInstance().startShortcutPopupWindowByoffset(context, s.toString(),mBiaoqing ,0, DensityUtils.dip2px(4));
+                BQMM.getInstance().startShortcutPopupWindowByoffset(context, s.toString(), mBiaoqing, 0, DensityUtils.dip2px(4));
             }
 
             @Override
@@ -817,7 +811,7 @@ public class CCPChattingFooter2 extends LinearLayout {
                 try {
                     jsonObject.put(TXT_MSGTYPE, FACETYPE);
                     jsonObject.put(MSG_DATA, msgCodes);
-                    jsonObject.put(EMOJI_TEXT,"["+face.getEmoText()+"]");
+                    jsonObject.put(EMOJI_TEXT, "[" + face.getEmoText() + "]");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -837,8 +831,8 @@ public class CCPChattingFooter2 extends LinearLayout {
                 String msgString = BQMMMessageHelper.getMixedMessageString(emojis);
                 //判断一下是纯文本还是富文本
                 if (isMixedMessage) {
-                    StringBuilder sb=new StringBuilder();
-                    for(int i=0;i<emojis.size();i++){
+                    StringBuilder sb = new StringBuilder();
+                    for (int i = 0; i < emojis.size(); i++) {
 
                         if (emojis.get(i).getClass().equals(Emoji.class)) {
                             Emoji item = (Emoji) emojis.get(i);
@@ -853,7 +847,7 @@ public class CCPChattingFooter2 extends LinearLayout {
                     try {
                         jsonObject.put(TXT_MSGTYPE, EMOJITYPE);
                         jsonObject.put(MSG_DATA, msgCodes);
-                        jsonObject.put(EMOJI_TEXT,sb);
+                        jsonObject.put(EMOJI_TEXT, sb);
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -865,62 +859,62 @@ public class CCPChattingFooter2 extends LinearLayout {
         });
         LogUtil.i(TAG, "init time:" + (System.currentTimeMillis() - currentTimeMillis));
     }
-    
-    final OnItemClickListener onItemClickListener =new OnItemClickListener() {
 
-		@Override
-		public void onItemClick(AdapterView<?> parent, View view, int position,
-				long id) {
-			if(mChattingFooterLinstener!=null){
-				bianShengPosition=position;
-				mChattingFooterLinstener.onVoiceChangeRequest(position);
-			}
-		}
-	};
-	private int bianShengPosition=0;
-    
-    
-    private int[] voiceArr=new int[]{R.drawable.voicechange_normal,R.drawable.voicechange_luodi,R.drawable.voicechange_dashu,R.drawable.voicechange_jingsong,R.drawable.voicechange_gaoguai,R.drawable.voicechange_kongling};
-    
-    final BaseAdapter changeVoiceAdapter =new BaseAdapter() {
-		
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			// TODO Auto-generated method stub
-			
-			
-			View v=View.inflate(getContext(), R.layout.ec_gridview_changevoice_item, null);
-			
-			ImageView iv=	(ImageView) v.findViewById(R.id.changevoice_item_iv);
-			TextView tv=	(TextView) v.findViewById(R.id.changevoice_item_tv);
-			
-			iv.setImageResource(voiceArr[position]);
-			tv.setText(getContext().getResources().getStringArray(R.array.change_voice_arr)[position]);
-			
-			
-			return v;
-		}
-		
-		@Override
-		public long getItemId(int position) {
-			// TODO Auto-generated method stub
-			return position;
-		}
-		
-		@Override
-		public Object getItem(int position) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-		
-		@Override
-		public int getCount() {
-			// TODO Auto-generated method stub
-			return 6;
-		}
-	};
-	private TextView tvCancel;
-	private TextView tvSend;
+    final OnItemClickListener onItemClickListener = new OnItemClickListener() {
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position,
+                                long id) {
+            if (mChattingFooterLinstener != null) {
+                bianShengPosition = position;
+                mChattingFooterLinstener.onVoiceChangeRequest(position);
+            }
+        }
+    };
+    private int bianShengPosition = 0;
+
+
+    private int[] voiceArr = new int[]{R.drawable.voicechange_normal, R.drawable.voicechange_luodi, R.drawable.voicechange_dashu, R.drawable.voicechange_jingsong, R.drawable.voicechange_gaoguai, R.drawable.voicechange_kongling};
+
+    final BaseAdapter changeVoiceAdapter = new BaseAdapter() {
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            // TODO Auto-generated method stub
+
+
+            View v = View.inflate(getContext(), R.layout.ec_gridview_changevoice_item, null);
+
+            ImageView iv = (ImageView) v.findViewById(R.id.changevoice_item_iv);
+            TextView tv = (TextView) v.findViewById(R.id.changevoice_item_tv);
+
+            iv.setImageResource(voiceArr[position]);
+            tv.setText(getContext().getResources().getStringArray(R.array.change_voice_arr)[position]);
+
+
+            return v;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            // TODO Auto-generated method stub
+            return position;
+        }
+
+        @Override
+        public Object getItem(int position) {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
+        @Override
+        public int getCount() {
+            // TODO Auto-generated method stub
+            return 6;
+        }
+    };
+    private TextView tvCancel;
+    private TextView tvSend;
 
     /**
      *
@@ -933,41 +927,40 @@ public class CCPChattingFooter2 extends LinearLayout {
                 ResourceHelper.fromDPToPix(getContext(), 320));
         mAppPanel.setOnAppPanelItemClickListener(mAppPanelItemClickListener);
         mAppPanel.setPanelHeight(height);
-        
+
     }
 
     protected void handlerGridViewItemClick(int position) {
 
-    	
-    	
-    	switch (position) {
-		case 0:
-			
-			break;
-		case 1:
-			
-			break;
-		case 2:
-			
-			break;
-		case 3:
-			
-			break;
-		case 4:
-			
-			break;
-		case 5:
-			
-			break;
 
-		default:
-			break;
-		}
-    	
-    	
-	}
+        switch (position) {
+            case 0:
 
-	public final void initSmileyPanel() {
+                break;
+            case 1:
+
+                break;
+            case 2:
+
+                break;
+            case 3:
+
+                break;
+            case 4:
+
+                break;
+            case 5:
+
+                break;
+
+            default:
+                break;
+        }
+
+
+    }
+
+    public final void initSmileyPanel() {
         mBiaoqing = (ImageButton) findViewById(R.id.chatting_smiley_btn);
         mBiaoqing.setVisibility(View.VISIBLE);
         mBiaoqing.setOnClickListener(mChattingSmileyClickListener);
@@ -995,11 +988,10 @@ public class CCPChattingFooter2 extends LinearLayout {
     }
 
     /**
-     *
      * @param tab
      */
     public final void switchChattingPanel(String tab) {
-        if(TextUtils.isEmpty(tab)){
+        if (TextUtils.isEmpty(tab)) {
             return;
         }
     }
@@ -1018,7 +1010,6 @@ public class CCPChattingFooter2 extends LinearLayout {
     }
 
 
-
     /**
      * Hide {@link ChatFooterPanel} if not null.
      */
@@ -1033,16 +1024,16 @@ public class CCPChattingFooter2 extends LinearLayout {
      * Whether display emoji panel
      */
     private void setBiaoqingEnabled(boolean enabled) {
-        if(mBiaoqing == null) {
+        if (mBiaoqing == null) {
             return;
         }
 
-        if((mBiaoqingEnabled && enabled) || (!mBiaoqingEnabled && !enabled)) {
+        if ((mBiaoqingEnabled && enabled) || (!mBiaoqingEnabled && !enabled)) {
             LogUtil.d(TAG, "biao qing panel has " + enabled);
             return;
         }
         mBiaoqingEnabled = enabled;
-        if(enabled) {
+        if (enabled) {
             mBiaoqing.setImageDrawable(getContext().getResources().getDrawable(R.drawable.chatting_biaoqing_operation_enabled));
             return;
         }
@@ -1052,33 +1043,34 @@ public class CCPChattingFooter2 extends LinearLayout {
     public void resetVoiceRecordingButton() {
         mVoiceButtonTouched = false;
 
-        if(mVoiceRcdHitCancelView != null && mVoiceRcdHitCancelView.getVisibility() == View.VISIBLE) {
+        if (mVoiceRcdHitCancelView != null && mVoiceRcdHitCancelView.getVisibility() == View.VISIBLE) {
             // Start to cancel sending events when recording over
-            if(mChattingFooterLinstener != null) {
+            if (mChattingFooterLinstener != null) {
                 mChattingFooterLinstener.OnVoiceRcdCancelRequest();
             }
-            return ; 
+            return;
         }
 
-        if(mChattingFooterLinstener != null&&!isChangeVoice) {
+        if (mChattingFooterLinstener != null && !isChangeVoice) {
             mChattingFooterLinstener.OnVoiceRcdStopRequest(true);
-        }else {
-        	mChattingFooterLinstener.OnVoiceRcdStopRequest(false);
+        } else {
+            mChattingFooterLinstener.OnVoiceRcdStopRequest(false);
         }
     }
-    
-    public void showBianShengView(){
-    	llBianSheng.setVisibility(View.VISIBLE);
-    	pageView.setVisibility(View.GONE);
+
+    public void showBianShengView() {
+        llBianSheng.setVisibility(View.VISIBLE);
+        pageView.setVisibility(View.GONE);
     }
 
     /**
      * If it is possible to enable the send button
+     *
      * @param canSend
      */
     private void enableChattingSend(boolean canSend) {
-        if(mChattingAttach == null || mChattingSend == null) {
-            return ;
+        if (mChattingAttach == null || mChattingSend == null) {
+            return;
         }
 
         // If the current attachment button visible, and the Enter key to send the message model
@@ -1087,7 +1079,7 @@ public class CCPChattingFooter2 extends LinearLayout {
             return;
         }
 
-        if(mDonotEnableEnterkey) {
+        if (mDonotEnableEnterkey) {
             mChattingSend.setVisibility(View.VISIBLE);
             mChattingAttach.setVisibility(View.GONE);
         } else {
@@ -1099,10 +1091,10 @@ public class CCPChattingFooter2 extends LinearLayout {
     }
 
     private void requestFocusEditText(boolean focus) {
-        if(focus) {
+        if (focus) {
             mEditText.requestFocus();
             mTextPanel.setEnabled(true);
-            return ;
+            return;
         }
         mEditText.clearFocus();
         mTextPanel.setEnabled(false);
@@ -1115,14 +1107,14 @@ public class CCPChattingFooter2 extends LinearLayout {
     public final void resetEnableEnterkey() {
         mDonotEnableEnterkey = ECPreferences.getSharedPreferences()
                 .getBoolean(ECPreferenceSettings.SETTINGS_ENABLE_ENTER_KEY.getId(),
-                        (Boolean) ECPreferenceSettings.SETTINGS_ENABLE_ENTER_KEY .getDefaultValue());
+                        (Boolean) ECPreferenceSettings.SETTINGS_ENABLE_ENTER_KEY.getDefaultValue());
     }
 
     /**
      * Clear input box
      */
     public final void clearEditText() {
-        if(mEditText == null) {
+        if (mEditText == null) {
             return;
         }
 
@@ -1131,6 +1123,7 @@ public class CCPChattingFooter2 extends LinearLayout {
 
     /**
      * 获得最后的文本
+     *
      * @return
      */
     public final String getLastText() {
@@ -1141,11 +1134,10 @@ public class CCPChattingFooter2 extends LinearLayout {
     }
 
     /**
-     *
      * @param showKeyBord
      */
-    private void setKeyBordShow(boolean showKeyBord){
-        if(mShowKeyBord = showKeyBord) {
+    private void setKeyBordShow(boolean showKeyBord) {
+        if (mShowKeyBord = showKeyBord) {
             return;
         }
         LogUtil.d(TAG, "set Show KeyBord " + showKeyBord);
@@ -1154,14 +1146,15 @@ public class CCPChattingFooter2 extends LinearLayout {
 
     /**
      * change chatting mode for Speech mode, input mode
+     *
      * @param resId
      */
     private void setChattingModeImageResource(int resId) {
-        if(mChattingModeButton == null) {
+        if (mChattingModeButton == null) {
             return;
         }
 
-        if(resId == R.drawable.chatting_setmode_voice_btn) {
+        if (resId == R.drawable.chatting_setmode_voice_btn) {
             mChattingModeButton.setContentDescription(getContext().getString(R.string.chat_footer_switch_mode_voice_btn));
         } else {
             mChattingModeButton.setContentDescription(getContext().getString(R.string.chat_footer_switch_mode_keybord_btn));
@@ -1172,33 +1165,33 @@ public class CCPChattingFooter2 extends LinearLayout {
 
     /**
      * switch chatting mode for Speech mode, input mode
+     *
      * @param mode
      */
     private void switchChattingMode(int mode) {
         mChattingMode = mode;
         switch (mode) {
             case CHATTING_MODE_KEYBORD:
-            	ll_voice_area.setVisibility(View.GONE);
+                ll_voice_area.setVisibility(View.GONE);
                 mTextPanel.setVisibility(View.VISIBLE);
                 setChattingModeImageResource(R.drawable.chatting_setmode_voice_btn);
                 break;
             case CHATTING_MODE_VOICE:
-            	
-            	isRecodering=false;
-            	ll_voice_area.setVisibility(View.VISIBLE);
-            	ll_voice_area.invalidate();
+
+                isRecodering = false;
+                ll_voice_area.setVisibility(View.VISIBLE);
+                ll_voice_area.invalidate();
                 mTextPanel.setVisibility(View.INVISIBLE);
                 setChattingModeImageResource(R.drawable.chatting_setmode_keyboard_btn);
-                bianShengPosition=0;
+                bianShengPosition = 0;
                 break;
             default:
                 break;
-                
+
         }
     }
 
     /**
-     *
      * @return
      */
     public boolean isButtomPanelNotVisibility() {
@@ -1208,16 +1201,18 @@ public class CCPChattingFooter2 extends LinearLayout {
     public boolean isSetAtSomeoneing() {
         return mSetAtSomeone;
     }
+
     /**
      * set the {@link AppPanel} default height
+     *
      * @param height
      */
     private void setBottomPanelHeight(int height) {
 
         int widthPixels = 0;
-        if(height <= 0) {
+        if (height <= 0) {
             int[] displayScreenMetrics = getDisplayScreenMetrics();
-            if(displayScreenMetrics[0] >= displayScreenMetrics[1]) {
+            if (displayScreenMetrics[0] >= displayScreenMetrics[1]) {
                 height = ResourceHelper.fromDPToPix(getContext(), 230);
             } else {
                 height = ECPreferences.getSharedPreferences().getInt(
@@ -1228,11 +1223,11 @@ public class CCPChattingFooter2 extends LinearLayout {
             widthPixels = displayScreenMetrics[0];
         }
 
-        if(height > 0 && mChattingBottomPanel != null) {
-            LogUtil.d(TAG , "set bottom panel height: " + height);
+        if (height > 0 && mChattingBottomPanel != null) {
+            LogUtil.d(TAG, "set bottom panel height: " + height);
             ViewGroup.LayoutParams layoutParams = new LayoutParams(LayoutParams.FILL_PARENT, height);
-            if(mChattingBottomPanel.getLayoutParams() != null) {
-                layoutParams =  mChattingBottomPanel.getLayoutParams();
+            if (mChattingBottomPanel.getLayoutParams() != null) {
+                layoutParams = mChattingBottomPanel.getLayoutParams();
             }
             layoutParams.height = height;
         }
@@ -1242,6 +1237,7 @@ public class CCPChattingFooter2 extends LinearLayout {
 
     /**
      * Access to mobile phone screen resolution and the width and height
+     *
      * @return
      */
     @SuppressWarnings("deprecation")
@@ -1254,7 +1250,7 @@ public class CCPChattingFooter2 extends LinearLayout {
             metrics[1] = displayMetrics.heightPixels;
             return metrics;
         }
-        Display display = ((WindowManager)getContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+        Display display = ((WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
         metrics[0] = display.getWidth();
         metrics[1] = display.getHeight();
 
@@ -1268,20 +1264,20 @@ public class CCPChattingFooter2 extends LinearLayout {
         int maxHeightDensity = ResourceHelper.fromDPToPix(getContext(), 180);
         int density = DensityUtil.getMetricsDensity(getContext(), 50.0F);
 
-        if(offsert + density < maxHeightDensity) {
+        if (offsert + density < maxHeightDensity) {
             yLocation = -1;
         } else {
-            yLocation = density +(offsert - maxHeightDensity) / 2;
+            yLocation = density + (offsert - maxHeightDensity) / 2;
         }
 
-        if(popupWindow == null) {
+        if (popupWindow == null) {
             popupWindow = new RecordPopupWindow(View.inflate(getContext(),
                     R.layout.voice_rcd_hint_window2, null),
                     WindowManager.LayoutParams.MATCH_PARENT,
                     WindowManager.LayoutParams.WRAP_CONTENT);
             mVoiceHintAnim = ((ImageView) popupWindow.getContentView().findViewById(R.id.voice_rcd_hint_anim));
-            mVoiceHintAnimArea =  popupWindow.getContentView().findViewById(R.id.voice_rcd_hint_anim_area);
-            mVoiceRcdHitCancelView =  popupWindow.getContentView().findViewById(R.id.voice_rcd_hint_cancel_area);
+            mVoiceHintAnimArea = popupWindow.getContentView().findViewById(R.id.voice_rcd_hint_anim_area);
+            mVoiceRcdHitCancelView = popupWindow.getContentView().findViewById(R.id.voice_rcd_hint_cancel_area);
             mVoiceHintCancelText = ((TextView) popupWindow.getContentView().findViewById(R.id.voice_rcd_hint_cancel_text));
             mVoiceHintCancelIcon = ((ImageView) popupWindow.getContentView().findViewById(R.id.voice_rcd_hint_cancel_icon));
             mVoiceHintLoading = popupWindow.getContentView().findViewById(R.id.voice_rcd_hint_loading);
@@ -1291,17 +1287,17 @@ public class CCPChattingFooter2 extends LinearLayout {
 
         }
 
-        if(yLocation != -1) {
+        if (yLocation != -1) {
             mVoiceHintTooshort.setVisibility(View.GONE);
             mVoiceHintRcding.setVisibility(View.GONE);
             mVoiceHintLoading.setVisibility(View.VISIBLE);
-            popupWindow.showAtLocation(this, Gravity.CENTER_HORIZONTAL|Gravity.TOP, 0, yLocation);
+            popupWindow.showAtLocation(this, Gravity.CENTER_HORIZONTAL | Gravity.TOP, 0, yLocation);
         }
     }
 
     public void displayAmplitude(double amplitude) {
-        for(int i = 0 ; i < ampIcon.length ; i++) {
-            if(amplitude < ampValue[i] || amplitude >= ampValue[i + 1]) {
+        for (int i = 0; i < ampIcon.length; i++) {
+            if (amplitude < ampValue[i] || amplitude >= ampValue[i + 1]) {
                 continue;
             }
             LogUtil.d(LogUtil.getLogUtilsTag(getClass()), "Voice rcd amplitude " + amplitude);
@@ -1312,7 +1308,7 @@ public class CCPChattingFooter2 extends LinearLayout {
                 mVoiceHintRcding.setVisibility(View.GONE);
                 mVoiceHintTooshort.setVisibility(View.GONE);
             }
-            return ;
+            return;
         }
     }
 
@@ -1320,7 +1316,7 @@ public class CCPChattingFooter2 extends LinearLayout {
      *
      */
     public void showVoiceRecording() {
-        if(mChattingFooterLinstener != null) {
+        if (mChattingFooterLinstener != null) {
             mChattingFooterLinstener.OnVoiceRcdStartRequest();
         }
         mVoiceHintLoading.setVisibility(View.GONE);
@@ -1343,12 +1339,12 @@ public class CCPChattingFooter2 extends LinearLayout {
     }
 
     public synchronized void tooShortPopuWindow() {
-        LogUtil.d(LogUtil.getLogUtilsTag(CCPChattingFooter2.class), "CCPChatFooter voice to short , then set enable false" );
+        LogUtil.d(LogUtil.getLogUtilsTag(CCPChattingFooter2.class), "CCPChatFooter voice to short , then set enable false");
         mVoiceRecord.setEnabled(false);
         mVoiceRecordBianSheng.setEnabled(false);
         if (popupWindow != null) {
             mVoiceHintTooshort.setVisibility(View.VISIBLE);
-            if(mChronometer!=null){
+            if (mChronometer != null) {
 //              mChronometer.stop();
 //              mChronometerBianSheng.stop();
             }
@@ -1359,12 +1355,12 @@ public class CCPChattingFooter2 extends LinearLayout {
         if (mHandler != null) {
             mHandler.sendEmptyMessageDelayed(WHAT_ON_DIMISS_DIALOG, 500L);
         }
-        
-        if(llBianSheng.VISIBLE==View.VISIBLE){
-        	llBianSheng.setVisibility(View.GONE);
-        	pageView.setVisibility(View.VISIBLE);
+
+        if (llBianSheng.VISIBLE == View.VISIBLE) {
+            llBianSheng.setVisibility(View.GONE);
+            pageView.setVisibility(View.VISIBLE);
         }
-        
+
     }
 
     /**
@@ -1372,6 +1368,7 @@ public class CCPChattingFooter2 extends LinearLayout {
      * an implementation of {@link android.view.View.OnDragListener}. To send a drag event to a
      * View, the system calls the
      * {@link android.view.View.OnDragListener#onDrag(android.view.View, android.view.DragEvent)} method.
+     *
      * @param l An implementation of {@link android.view.View.OnDragListener}.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -1380,7 +1377,6 @@ public class CCPChattingFooter2 extends LinearLayout {
     }
 
     /**
-     *
      * @param l
      */
     public final void setOnChattingFooterLinstener(OnChattingFooterLinstener l) {
@@ -1388,7 +1384,6 @@ public class CCPChattingFooter2 extends LinearLayout {
     }
 
     /**
-     *
      * @param l
      */
     public final void setOnChattingPanelClickListener(OnChattingPanelClickListener l) {
@@ -1397,13 +1392,13 @@ public class CCPChattingFooter2 extends LinearLayout {
 
     /**
      * Register a drag event listener callback object for {@link CCPEditText}
+     *
      * @param textWatcher
      */
     public final void addTextChangedListener(TextWatcher textWatcher) {
         mChatingInputTextWatcher = new ChatingInputTextWatcher(textWatcher);
         mEditText.addTextChangedListener(mChatingInputTextWatcher);
     }
-
 
 
     /**
@@ -1423,16 +1418,15 @@ public class CCPChattingFooter2 extends LinearLayout {
     }
 
     /**
-     *
      * @return
      */
-    public long getAvailaleSize(){
+    public long getAvailaleSize() {
 
         File path = Environment.getExternalStorageDirectory(); //取得sdcard文件路径
         StatFs stat = new StatFs(path.getPath());
         long blockSize = stat.getBlockSize();
         long availableBlocks = stat.getAvailableBlocks();
-        return (availableBlocks * blockSize)/1024 /1024;//  MIB单位
+        return (availableBlocks * blockSize) / 1024 / 1024;//  MIB单位
     }
 
     @Override
@@ -1452,19 +1446,18 @@ public class CCPChattingFooter2 extends LinearLayout {
     }
 
     /**
-     *
      * @param mode
      * @param focus
      */
-    public final void setMode(int mode , boolean focus) {
+    public final void setMode(int mode, boolean focus) {
         switchChattingMode(mode);
         switch (mode) {
             case CHATTING_MODE_KEYBORD:
                 requestFocusEditText(true);
                 hideChatFooterPanel();
 
-                if(focus) {
-                    if(mEditText.length() > 0) {
+                if (focus) {
+                    if (mEditText.length() > 0) {
                         enableChattingSend(true);
                         return;
                     }
@@ -1482,13 +1475,12 @@ public class CCPChattingFooter2 extends LinearLayout {
     }
 
     /**
-     *
      * @param mode
      * @param messageMode
      * @param focus
      */
-    private void setMode(int mode , int messageMode , boolean focus) {
-        if(focus) {
+    private void setMode(int mode, int messageMode, boolean focus) {
+        if (focus) {
             switch (mode) {
                 case CHATTING_MODE_KEYBORD:
 
@@ -1497,8 +1489,8 @@ public class CCPChattingFooter2 extends LinearLayout {
                     break;
 
                 case CHATTING_MODE_VOICE:
-                    if(messageMode == 22) {
-                        if(mAppPanel == null) {
+                    if (messageMode == 22) {
+                        if (mAppPanel == null) {
                             initAppPanel();
                         }
                         mAppPanel.initFlipperRotateMe();
@@ -1509,7 +1501,7 @@ public class CCPChattingFooter2 extends LinearLayout {
                             switchChattingMode(CHATTING_MODE_KEYBORD);
                         }
                     } else if (messageMode == 21) {
-                        if (mAppPanel != null){
+                        if (mAppPanel != null) {
                             mAppPanel.setVisibility(View.GONE);
                         }
                         bqmmKeyboard.setVisibility(VISIBLE);
@@ -1522,10 +1514,10 @@ public class CCPChattingFooter2 extends LinearLayout {
 
                     break;
                 default:
-                    if(focus && messageMode != 21 && mBiaoqing != null) {
+                    if (focus && messageMode != 21 && mBiaoqing != null) {
                         setBiaoqingEnabled(false);
                     }
-                    if(!focus && mode == 0) {
+                    if (!focus && mode == 0) {
                         setBiaoqingEnabled(false);
                     }
                     mChattingBottomPanel.setVisibility(View.VISIBLE);
@@ -1538,7 +1530,7 @@ public class CCPChattingFooter2 extends LinearLayout {
                 hideChatFooterPanel();
             }
 
-            if(messageMode != 21 && mBiaoqing != null) {
+            if (messageMode != 21 && mBiaoqing != null) {
                 setBiaoqingEnabled(false);
             }
         }
@@ -1554,17 +1546,17 @@ public class CCPChattingFooter2 extends LinearLayout {
     /**
      *
      */
-    public final void onPause(){
+    public final void onPause() {
 
         mChattingFooterLinstener.onPause();
     }
 
     public void onDestory() {
         mAppPanel = null;
-        if(mHandler != null) {
+        if (mHandler != null) {
             mHandler.removeCallbacksAndMessages(null);
         }
-        if(mEditText != null) {
+        if (mEditText != null) {
             mEditText.setOnEditorActionListener(null);
             mEditText.setOnTouchListener(null);
             mEditText.removeTextChangedListener(null);
@@ -1596,7 +1588,7 @@ public class CCPChattingFooter2 extends LinearLayout {
 
     /**
      * Interface definition for a callback to be invoked when the {@link ChatFooterPanel} has been click
-     * such as .emoji click , voice rcd onTouch 
+     * such as .emoji click , voice rcd onTouch
      */
     public interface OnChattingFooterLinstener {
 
@@ -1604,18 +1596,20 @@ public class CCPChattingFooter2 extends LinearLayout {
 
         void sendChangeVoiceMsg(boolean isSendYuanSheng);
 
-		void OnVoiceRcdStartRequest();
-		
-		void stopVoicePlay();
+        void OnVoiceRcdStartRequest();
+
+        void stopVoicePlay();
+
         /**
          * Called when the voce record button nomal and cancel send voice.
          */
         void OnVoiceRcdCancelRequest();
+
         /**
          * Called when the voce record button nomal and send voice.
          */
         void OnVoiceRcdStopRequest(boolean isSend);
-        
+
         void onVoiceChangeRequest(int position);
 
         void OnSendTextMessageRequest(CharSequence text);
@@ -1637,25 +1631,33 @@ public class CCPChattingFooter2 extends LinearLayout {
 
     /**
      * Interface definition for a callback to be invoked when the {@link ChatFooterPanel} has been click
-     * such as .emoji click , voice rcd onTouch 
+     * such as .emoji click , voice rcd onTouch
      */
     public interface OnChattingPanelClickListener {
         void OnTakingPictureRequest();
+
         void OnSelectImageReuqest();
+
         void OnSelectFileRequest();
+
         void OnSelectVoiceRequest();
+
         void OnSelectVideoRequest();
+
         void OnSelectFireMsg();
+
         void OnSelectLocationRequest();
 
         void OnSelectRedPacketRequest();
 
+        void OnSelectTransferRequest();
     }
 
 
     private class ChatingInputTextWatcher implements TextWatcher {
 
         private TextWatcher mTextWatcher;
+
         /**
          *
          */
@@ -1680,7 +1682,7 @@ public class CCPChattingFooter2 extends LinearLayout {
         @Override
         public void afterTextChanged(Editable s) {
             mTextWatcher.afterTextChanged(s);
-            if ((s.length() > 0) && (s.toString().trim().length() > 0)){
+            if ((s.length() > 0) && (s.toString().trim().length() > 0)) {
                 mDonotEnableEnterkey = true;
                 enableChattingSend(true);
             } else {
@@ -1691,10 +1693,10 @@ public class CCPChattingFooter2 extends LinearLayout {
 
     }
 
-    public void setLastText(String text , int selecton , boolean clear) {
-        if(clear && (text == null || text.length() == 0 || mEditText == null)) {
+    public void setLastText(String text, int selecton, boolean clear) {
+        if (clear && (text == null || text.length() == 0 || mEditText == null)) {
             mEditText.setText("");
-            return ;
+            return;
         }
         mSetAtSomeone = true;
         BQMMEditView editText = this.mEditText;
@@ -1733,31 +1735,31 @@ public class CCPChattingFooter2 extends LinearLayout {
 
     public void delSomeBody(String text) {
         ECContacts remove = null;
-        for(ECContacts c : mAtSomeone) {
-            if(c != null && text.equals(c.getNickname())) {
+        for (ECContacts c : mAtSomeone) {
+            if (c != null && text.equals(c.getNickname())) {
                 remove = c;
                 break;
             }
         }
-        if(remove != null) {
+        if (remove != null) {
             mAtSomeone.remove(remove);
         }
     }
 
     public String[] getAtSomeBody() {
-        if(mAtSomeone == null || mAtSomeone.isEmpty()) {
+        if (mAtSomeone == null || mAtSomeone.isEmpty()) {
             return null;
         }
         String[] at = new String[mAtSomeone.size()];
-        for(int i = 0; i < mAtSomeone.size() ; i ++) {
+        for (int i = 0; i < mAtSomeone.size(); i++) {
             at[i] = mAtSomeone.get(i).getContactid();
         }
         return at;
     }
 
     public void clearSomeBody() {
-        if(mAtSomeone == null || mAtSomeone.isEmpty()) {
-            return ;
+        if (mAtSomeone == null || mAtSomeone.isEmpty()) {
+            return;
         }
         mAtSomeone.clear();
     }

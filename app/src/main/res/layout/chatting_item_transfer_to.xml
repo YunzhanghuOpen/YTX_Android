@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/ChattingUIContent"
+    android:layout_below="@+id/chatting_time_tv">
+
+    <View
+        android:layout_width="0.0dip"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.0" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/chatting_user_tv"
+            style="@style/ChattingUISenderText"
+            android:layout_gravity="right"
+            android:visibility="gone" />
+
+        <RelativeLayout
+            android:id="@+id/bubble"
+            android:layout_width="210dp"
+            android:layout_height="90dp"
+            android:background="@drawable/ytx_transfer_chatto_bg">
+
+            <ImageView
+                android:id="@+id/iv_money_icon"
+                style="@style/RedPacketIconStyle"
+                android:src="@drawable/ytx_transfer_icon" />
+
+            <TextView
+                android:id="@+id/tv_money_greeting"
+                style="@style/RedPacketGreetingStyle"
+                android:text="对方已收到转账" />
+
+            <TextView
+                android:id="@+id/tv_transfer_amount"
+                style="@style/RedPacketCheckStyle" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:layout_alignParentBottom="true">
+
+                <TextView
+                    android:id="@+id/tv_transfer_sponsor_name"
+                    style="@style/RedPacketSponsorStyle"
+                    android:text="转账" />
+
+            </RelativeLayout>
+        </RelativeLayout>
+    </LinearLayout>
+
+    <include layout="@layout/chatting_item_avatar_to" />
+
+</LinearLayout>

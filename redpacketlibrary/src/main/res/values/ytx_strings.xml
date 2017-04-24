@@ -5,6 +5,7 @@
     <string name="money_msg_someone_take_money">%1$s领取了你的红包</string>
     <string name="ytx_red_packet">容联云红包</string>
     <string name="attach_red_packet">红包</string>
+    <string name="attach_transfer">转账</string>
     <string name="change">零钱</string>
     <string name="exclusive_red_packet">专属红包</string>
 </resources>

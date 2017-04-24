@@ -126,6 +126,9 @@ public class AppPanel extends LinearLayout implements CCPFlipper.OnFlipperPageLi
 				case R.string.attach_red_packet:
 					mAppPanelItemClickListener.OnSelectRedPacketClick();
 					break;
+				case R.string.attach_transfer:
+					mAppPanelItemClickListener.OnSelectTransferClick();
+					break;
 					default:
 					break;
 				}
@@ -405,5 +408,6 @@ public class AppPanel extends LinearLayout implements CCPFlipper.OnFlipperPageLi
     	void OnSelectFireMsgClick();
     	void OnSelectFireLocationClick();
 		void OnSelectRedPacketClick();
+		void OnSelectTransferClick();
 	}
 }

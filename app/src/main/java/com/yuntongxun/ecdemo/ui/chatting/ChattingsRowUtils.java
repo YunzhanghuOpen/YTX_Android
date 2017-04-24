@@ -41,6 +41,8 @@ public class ChattingsRowUtils {
 				return 7000;
 			} else if (RedPacketUtil.getInstance().isRedPacketAckMessage(msg) != null) {
 				return 8000;
+			}else if (RedPacketUtil.getInstance().isTransferMsg(msg)!=null){
+				return 9000;
 			}
 
 			return 2000;

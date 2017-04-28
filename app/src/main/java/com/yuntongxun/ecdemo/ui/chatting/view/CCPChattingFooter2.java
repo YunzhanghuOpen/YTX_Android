@@ -628,14 +628,6 @@ public class CCPChattingFooter2 extends LinearLayout {
 
         }
 
-        @Override
-        public void OnSelectTransferClick() {
-            if (mChattingPanelClickListener != null) {
-                mChattingPanelClickListener.OnSelectTransferRequest();
-            }
-        }
-
-
     };
 
 
@@ -1650,7 +1642,6 @@ public class CCPChattingFooter2 extends LinearLayout {
 
         void OnSelectRedPacketRequest();
 
-        void OnSelectTransferRequest();
     }
 
 

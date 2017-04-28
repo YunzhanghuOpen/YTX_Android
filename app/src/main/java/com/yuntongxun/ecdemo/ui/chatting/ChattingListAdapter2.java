@@ -38,8 +38,6 @@ import com.yuntongxun.ecdemo.ui.chatting.model.RedPacketRxRow;
 import com.yuntongxun.ecdemo.ui.chatting.model.RedPacketTxRow;
 import com.yuntongxun.ecdemo.ui.chatting.model.RichTextRxRow;
 import com.yuntongxun.ecdemo.ui.chatting.model.RichTextTxRow;
-import com.yuntongxun.ecdemo.ui.chatting.model.TransferRxRow;
-import com.yuntongxun.ecdemo.ui.chatting.model.TransferTxRow;
 import com.yuntongxun.ecdemo.ui.chatting.model.VoiceRxRow;
 import com.yuntongxun.ecdemo.ui.chatting.model.VoiceTxRow;
 import com.yuntongxun.ecsdk.ECChatManager;
@@ -302,8 +300,6 @@ public class ChattingListAdapter2 extends CCPListAdapter<ECMessage> {
         mRowItems.put(Integer.valueOf(17), new RedPacketTxRow(17));
         mRowItems.put(Integer.valueOf(18), new RedPacketAckRxRow(18));
         mRowItems.put(Integer.valueOf(19), new RedPacketAckTxRow(19));
-        mRowItems.put(Integer.valueOf(20), new TransferRxRow(20));
-        mRowItems.put(Integer.valueOf(21), new TransferTxRow(21));
     }
 
     /**

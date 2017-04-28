@@ -215,23 +215,6 @@ public class ChattingListClickListener implements View.OnClickListener {
                 });
 
                 break;
-            case ViewHolderTag.TagType.TAG_IM_TRANSFER:
-                //打开转账
-                JSONObject jsonTransfer = RedPacketUtil.getInstance().isTransferMsg(iMessage);
-                String amount = jsonTransfer.optString(RPConstant.EXTRA_TRANSFER_AMOUNT);//转账金额
-                String time = jsonTransfer.optString(RPConstant.EXTRA_TRANSFER_PACKET_TIME);//转账时间
-                String messageDirect;
-                if (iMessage.getDirection() == ECMessage.Direction.RECEIVE) {//接受者
-                    messageDirect = RPConstant.MESSAGE_DIRECT_RECEIVE;
-                } else {//发送者
-                    messageDirect = RPConstant.MESSAGE_DIRECT_SEND;
-                }
-                RedPacketInfo data = new RedPacketInfo();
-                data.messageDirect = messageDirect;
-                data.redPacketAmount = amount;//转账金额
-                data.transferTime = time;//转账时间
-                RPRedPacketUtil.getInstance().openTransferPacket(mContext,data);
-                break;
             default:
                 break;
         }

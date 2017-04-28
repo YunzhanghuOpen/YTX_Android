@@ -247,7 +247,7 @@ public class SettingsActivity extends ECSuperActivity implements View.OnClickLis
         settings_money.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                RPRedPacketUtil.getInstance().startChangeActivity(SettingsActivity.this);
+                RPRedPacketUtil.getInstance().startRecordActivity(SettingsActivity.this);
             }
         });
     }

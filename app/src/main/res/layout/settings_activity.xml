@@ -161,7 +161,7 @@
             ecdemo:item_accessoryType="arrow"
             ecdemo:item_showDivider="false"
             android:layout_marginTop="@dimen/LargerPadding"
-            ecdemo:item_titleText="@string/change" />
+            ecdemo:item_titleText="@string/record" />
 
         <com.yuntongxun.ecdemo.common.view.SettingItem
             android:id="@+id/setting_exit"

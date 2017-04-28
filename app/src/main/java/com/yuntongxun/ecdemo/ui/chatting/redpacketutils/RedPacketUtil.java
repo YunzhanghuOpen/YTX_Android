@@ -159,29 +159,4 @@ public class RedPacketUtil {
         }
         return isMyselfAckMsg;
     }
-    /**
-     * 是否转账消息
-     *
-     * @param message
-     * @return
-     */
-    public JSONObject isTransferMsg(ECMessage message) {
-        JSONObject jsonTransfer = null;
-        if (message.getType() == ECMessage.Type.TXT) {
-            // 设置内容
-            String extraData = message.getUserData();
-            if (!TextUtils.isEmpty(extraData)) {
-                try {
-                    JSONObject jsonObject = new JSONObject(extraData);
-                    if (jsonObject.has(RPConstant.MESSAGE_ATTR_IS_TRANSFER_PACKET_MESSAGE)
-                            && jsonObject.getBoolean(RPConstant.MESSAGE_ATTR_IS_TRANSFER_PACKET_MESSAGE)) {
-                        jsonTransfer = jsonObject;
-                    }
-                } catch (JSONException e) {
-                    Log.e("JSONException", e.toString());
-                }
-            }
-        }
-        return jsonTransfer;
-    }
 }

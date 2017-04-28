@@ -37,7 +37,7 @@ public class AppPanelControl {
 	public int[] cap = new int[]{R.string.app_panel_pic,
 			R.string.app_panel_tackpic, R.string.attach_red_packet, R.string.app_panel_file, R.string.app_panel_location};
 	public int[] capVoip = new int[]{R.string.app_panel_pic,
-			R.string.app_panel_tackpic, R.string.attach_red_packet, R.string.attach_transfer,R.string.app_panel_file,
+			R.string.app_panel_tackpic, R.string.attach_red_packet,R.string.app_panel_file,
 			R.string.app_panel_voice, R.string.app_panel_video, R.string.app_panel_read_after_fire, R.string.app_panel_location};
 
 	/**
@@ -121,13 +121,6 @@ public class AppPanelControl {
 				capability = new Capability(getContext().getString(
 						R.string.attach_red_packet), R.drawable.ytx_chat_redpacket_selector);
 				break;
-			//转账按钮
-			case R.string.attach_transfer:
-
-				capability = new Capability(getContext().getString(
-						R.string.attach_transfer), R.drawable.ytx_chat_transfer_selector);
-				break;
-
 			default:
 				break;
 		}

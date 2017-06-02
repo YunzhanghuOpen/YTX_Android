@@ -48,10 +48,10 @@ public class RedPacketAckRxRow extends BaseChattingRow {
                 holder.getChattingAvatar().setVisibility(View.GONE);
                 holder.getChattingUser().setVisibility(View.GONE);
                 String currentUserId = CCPAppManager.getClientUser().getUserId();   //当前登陆用户id
-                String receiveUserId = jsonObject.optString(RPConstant.EXTRA_RED_PACKET_RECEIVER_ID);//红包接收者id
-                String receiveUserNick = jsonObject.optString(RPConstant.EXTRA_RED_PACKET_RECEIVER_NAME);//红包接收者昵称
-                String sendUserId = jsonObject.optString(RPConstant.EXTRA_RED_PACKET_SENDER_ID);//红包发送者id
-                String sendUserNick = jsonObject.optString(RPConstant.EXTRA_RED_PACKET_SENDER_NAME);//红包发送者昵称
+                String receiveUserId = jsonObject.optString(RPConstant.MESSAGE_ATTR_RED_PACKET_RECEIVER_ID);//红包接收者id
+                String receiveUserNick = jsonObject.optString(RPConstant.MESSAGE_ATTR_RED_PACKET_RECEIVER_NICKNAME);//红包接收者昵称
+                String sendUserId = jsonObject.optString(RPConstant.MESSAGE_ATTR_RED_PACKET_SENDER_ID);//红包发送者id
+                String sendUserNick = jsonObject.optString(RPConstant.MESSAGE_ATTR_RED_PACKET_SENDER_NICKNAME);//红包发送者昵称
                 String text = "";
                 //发送者和领取者都是自己-
                 if (currentUserId.equals(receiveUserId) && currentUserId.equals(sendUserId)) {

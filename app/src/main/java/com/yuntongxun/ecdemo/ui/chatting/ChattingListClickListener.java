@@ -181,21 +181,23 @@ public class ChattingListClickListener implements View.OnClickListener {
                 final ProgressDialog progressDialog = new ProgressDialog(mContext);
                 progressDialog.setCanceledOnTouchOutside(false);
                 RedPacketInfo redPacketInfo = new RedPacketInfo();
-                redPacketInfo.redPacketId = jsonRedPacket.optString(RPConstant.EXTRA_RED_PACKET_ID);
+                redPacketInfo.redPacketId = jsonRedPacket.optString(RPConstant.MESSAGE_ATTR_RED_PACKET_ID);
+                redPacketInfo.redPacketType = jsonRedPacket.optString(RPConstant.MESSAGE_ATTR_RED_PACKET_TYPE);
                 if (iMessage.getDirection() == Direction.RECEIVE) {
                     redPacketInfo.messageDirect = RPConstant.MESSAGE_DIRECT_RECEIVE;
                 } else {
                     redPacketInfo.messageDirect = RPConstant.MESSAGE_DIRECT_SEND;
                 }
                 if (mContext.mChattingFragment.isPeerChat()) {//群聊
-                    redPacketInfo.chatType = RPConstant.CHATTYPE_GROUP;
+                    redPacketInfo.chatType = RPConstant.CHAT_TYPE_GROUP;
                 } else {//单聊
-                    redPacketInfo.chatType = RPConstant.CHATTYPE_SINGLE;
+                    redPacketInfo.chatType = RPConstant.CHAT_TYPE_SINGLE;
                 }
-                RPRedPacketUtil.getInstance().openRedPacket(redPacketInfo, mContext, new RPRedPacketUtil.RPOpenPacketCallback() {
+                RPRedPacketUtil.getInstance().openRedPacket(redPacketInfo.redPacketId,redPacketInfo.redPacketType, mContext, new RPRedPacketUtil.RPOpenPacketCallback() {
+
                     @Override
-                    public void onSuccess(String senderId, String senderNickname, String myAmount) {
-                        mContext.mChattingFragment.sendRedPacketAckMessage(senderId, senderNickname);
+                    public void onSuccess(RedPacketInfo redPacketInfo) {
+                        mContext.mChattingFragment.sendRedPacketAckMessage(redPacketInfo.senderId,redPacketInfo.senderNickname);
                     }
 
                     @Override

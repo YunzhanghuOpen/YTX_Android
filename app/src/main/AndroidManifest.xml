@@ -569,68 +569,6 @@
         <meta-data
             android:name="BUGLY_ENABLE_DEBUG"
             android:value="false"/>
-
-
-        <!--&lt;!&ndash;红包相关界面&ndash;&gt;-->
-        <!--<activity-->
-            <!--android:name="com.yunzhanghu.redpacketui.ui.activity.RPRedPacketActivity"-->
-            <!--android:screenOrientation="portrait"-->
-            <!--android:theme="@style/horizontal_slide"-->
-            <!--android:windowSoftInputMode="adjustPan|stateVisible"-->
-            <!--/>-->
-        <!--<activity-->
-
-            <!--android:name="com.yunzhanghu.redpacketui.ui.activity.RPDetailActivity"-->
-            <!--android:screenOrientation="portrait"-->
-            <!--android:theme="@style/horizontal_slide"-->
-            <!--android:windowSoftInputMode="adjustPan"-->
-            <!--/>-->
-
-        <!--<activity-->
-            <!--android:name="com.yunzhanghu.redpacketui.ui.activity.RPRecordActivity"-->
-            <!--android:screenOrientation="portrait"-->
-            <!--android:theme="@style/horizontal_slide"-->
-            <!--android:windowSoftInputMode="adjustPan"-->
-            <!--/>-->
-
-        <!--<activity-->
-            <!--android:name="com.yunzhanghu.redpacketui.ui.activity.RPWebViewActivity"-->
-            <!--android:screenOrientation="portrait"-->
-            <!--android:theme="@style/horizontal_slide"-->
-            <!--android:windowSoftInputMode="adjustResize|stateHidden"-->
-            <!--/>-->
-        <!--<activity-->
-            <!--android:name="com.yunzhanghu.redpacketui.ui.activity.RPChangeActivity"-->
-            <!--android:screenOrientation="portrait"-->
-            <!--android:theme="@style/horizontal_slide"-->
-            <!--android:windowSoftInputMode="adjustResize|stateHidden"-->
-            <!--/>-->
-        <!--<activity-->
-            <!--android:name="com.yunzhanghu.redpacketui.ui.activity.RPBankCardActivity"-->
-            <!--android:screenOrientation="portrait"-->
-            <!--android:theme="@style/horizontal_slide"-->
-            <!--android:windowSoftInputMode="adjustPan|stateHidden"-->
-            <!--&gt;</activity>-->
-
-        <!--<activity-->
-            <!--android:name="com.yunzhanghu.redpacketui.ui.activity.RPGroupMemberActivity"-->
-            <!--android:screenOrientation="portrait"-->
-            <!--android:theme="@style/horizontal_slide"-->
-            <!--android:windowSoftInputMode="adjustPan|stateHidden"-->
-            <!--/>-->
-
-        <!--<activity-->
-            <!--android:name="com.alipay.sdk.app.H5PayActivity"-->
-            <!--android:configChanges="orientation|keyboardHidden|navigation|screenSize"-->
-            <!--android:exported="false"-->
-            <!--android:screenOrientation="behind"-->
-            <!--android:windowSoftInputMode="adjustResize|stateHidden"-->
-            <!--/>-->
-        <!--&lt;!&ndash;红包相关界面end&ndash;&gt;-->
-
-
-
-
         <!-- 以下是华为的 -->
         <!-- 第三方相关 :接收Push消息（注册、Push消息、Push连接状态、标签，LBS上报结果）广播 -->
         <receiver android:name="com.yuntongxun.ecdemo.ui.huawei.MyReceiver" >

@@ -1,1 +1,1 @@
-include ':app', ':BQMM_Lib', ':redpacketlibrary'
+include ':app', ':BQMM_Lib',"redpacketui-open"

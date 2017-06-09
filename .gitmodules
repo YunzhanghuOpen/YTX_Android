@@ -1,0 +1,3 @@
+[submodule "redpacketui-open"]
+	path = redpacketui-open
+	url = git@github.com:YunzhanghuOpen/redpacketui-open.git

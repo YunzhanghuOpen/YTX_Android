@@ -150,8 +150,8 @@ public class RedPacketUtil {
         boolean isMyselfAckMsg = true;
         JSONObject jsonObject = isRedPacketAckMessage(message);
         if (jsonObject != null) {
-            String receiverId = jsonObject.optString(RPConstant.EXTRA_RED_PACKET_RECEIVER_ID);//红包接收者id
-            String senderId = jsonObject.optString(RPConstant.EXTRA_RED_PACKET_SENDER_ID);//红包发送者id
+            String receiverId = jsonObject.optString(RPConstant.MESSAGE_ATTR_RED_PACKET_RECEIVER_ID);//红包接收者id
+            String senderId = jsonObject.optString(RPConstant.MESSAGE_ATTR_RED_PACKET_SENDER_ID);//红包发送者id
             //发送者和领取者都不是自己
             if (!currentUserId.equals(receiverId) && !currentUserId.equals(senderId)) {
                 isMyselfAckMsg = false;

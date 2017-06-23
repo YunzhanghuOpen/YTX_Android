@@ -181,21 +181,14 @@ public class ChattingListClickListener implements View.OnClickListener {
                 final ProgressDialog progressDialog = new ProgressDialog(mContext);
                 progressDialog.setCanceledOnTouchOutside(false);
                 RedPacketInfo redPacketInfo = new RedPacketInfo();
-                redPacketInfo.redPacketId = jsonRedPacket.optString(RPConstant.EXTRA_RED_PACKET_ID);
-                if (iMessage.getDirection() == Direction.RECEIVE) {
-                    redPacketInfo.messageDirect = RPConstant.MESSAGE_DIRECT_RECEIVE;
-                } else {
-                    redPacketInfo.messageDirect = RPConstant.MESSAGE_DIRECT_SEND;
-                }
-                if (mContext.mChattingFragment.isPeerChat()) {//群聊
-                    redPacketInfo.chatType = RPConstant.CHATTYPE_GROUP;
-                } else {//单聊
-                    redPacketInfo.chatType = RPConstant.CHATTYPE_SINGLE;
-                }
+                redPacketInfo.redPacketId = jsonRedPacket.optString(RPConstant.MESSAGE_ATTR_RED_PACKET_ID);
+                redPacketInfo.redPacketType = jsonRedPacket.optString(RPConstant.MESSAGE_ATTR_RED_PACKET_TYPE);
                 RPRedPacketUtil.getInstance().openRedPacket(redPacketInfo, mContext, new RPRedPacketUtil.RPOpenPacketCallback() {
+
                     @Override
-                    public void onSuccess(String senderId, String senderNickname, String myAmount) {
-                        mContext.mChattingFragment.sendRedPacketAckMessage(senderId, senderNickname);
+                    public void onSuccess(RedPacketInfo redPacketInfo) {
+                        mContext.mChattingFragment.sendRedPacketAckMessage(redPacketInfo.senderId, redPacketInfo.senderNickname);
+
                     }
 
                     @Override
@@ -218,8 +211,8 @@ public class ChattingListClickListener implements View.OnClickListener {
             case ViewHolderTag.TagType.TAG_IM_TRANSFER:
                 //打开转账
                 JSONObject jsonTransfer = RedPacketUtil.getInstance().isTransferMsg(iMessage);
-                String amount = jsonTransfer.optString(RPConstant.EXTRA_TRANSFER_AMOUNT);//转账金额
-                String time = jsonTransfer.optString(RPConstant.EXTRA_TRANSFER_PACKET_TIME);//转账时间
+                String amount = jsonTransfer.optString(RPConstant.MESSAGE_ATTR_TRANSFER_AMOUNT);//转账金额
+                String time = jsonTransfer.optString(RPConstant.MESSAGE_ATTR_TRANSFER_TIME);//转账时间
                 String messageDirect;
                 if (iMessage.getDirection() == ECMessage.Direction.RECEIVE) {//接受者
                     messageDirect = RPConstant.MESSAGE_DIRECT_RECEIVE;
@@ -230,7 +223,7 @@ public class ChattingListClickListener implements View.OnClickListener {
                 data.messageDirect = messageDirect;
                 data.redPacketAmount = amount;//转账金额
                 data.transferTime = time;//转账时间
-                RPRedPacketUtil.getInstance().openTransferPacket(mContext,data);
+                RPRedPacketUtil.getInstance().openTransferPacket(mContext, data);
                 break;
             default:
                 break;

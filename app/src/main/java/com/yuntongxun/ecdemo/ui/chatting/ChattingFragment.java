@@ -1763,15 +1763,15 @@ public class ChattingFragment extends CCPFragment implements
             RedPacketInfo redPacketInfo = new RedPacketInfo();
             if (!isPeerChat()) {
                 //但来哦传递参数接收者ID，头像，昵称
-                redPacketInfo.toUserId = mRecipients;
-                redPacketInfo.toNickName = mUsername;
-                redPacketInfo.toAvatarUrl = "none";//容联云没有头像url，开发者设置自己app的头像url
+                redPacketInfo.receiverId = mRecipients;
+                redPacketInfo.receiverNickname = mUsername;
+                redPacketInfo.receiverAvatarUrl = "none";//容联云没有头像url，开发者设置自己app的头像url
                 redPacketInfo.chatType = 1;
                 type = RPConstant.RP_ITEM_TYPE_SINGLE;
             } else {
                 //如果是群聊传递群id和群人数
                 ECGroup ecGroup = GroupSqlManager.getECGroup(mRecipients);
-                redPacketInfo.toGroupId = ecGroup.getGroupId();
+                redPacketInfo.groupId = ecGroup.getGroupId();
                 redPacketInfo.groupMemberCount = ecGroup.getCount();
                 redPacketInfo.chatType = 2;
                 type = RPConstant.RP_ITEM_TYPE_GROUP;
@@ -1794,9 +1794,9 @@ public class ChattingFragment extends CCPFragment implements
         @Override
         public void OnSelectTransferRequest() {
             RedPacketInfo redPacketInfo = new RedPacketInfo();
-            redPacketInfo.toUserId = mRecipients;
-            redPacketInfo.toNickName = mUsername;
-            redPacketInfo.toAvatarUrl = "none";//容联云没有头像url，开发者设置自己app的头像url
+            redPacketInfo.receiverId = mRecipients;
+            redPacketInfo.receiverNickname = mUsername;
+            redPacketInfo.receiverAvatarUrl = "none";//容联云没有头像url，开发者设置自己app的头像url
             RPRedPacketUtil.getInstance().startRedPacket(getActivity(), RPConstant.RP_ITEM_TYPE_TRANSFER, redPacketInfo, new RPSendPacketCallback() {
                 @Override
                 public void onSendPacketSuccess(RedPacketInfo redPacketInfo) {
@@ -2726,14 +2726,14 @@ public class ChattingFragment extends CCPFragment implements
         try {
             String greetings = redPacketInfo.redPacketGreeting;//祝福语
             String moneyID = redPacketInfo.redPacketId;//红包ID
-            String specialReceiveId = redPacketInfo.toUserId;//专属接收者id
+            String specialReceiveId ="";//专属接收者id
             String redPacketType = redPacketInfo.redPacketType;//红包类型
             String text = "[" + getResources().getString(R.string.ytx_red_packet) + "]" + greetings;
 
             jsonObject.put(RPConstant.MESSAGE_ATTR_IS_RED_PACKET_MESSAGE, true);//是否是红包消息
-            jsonObject.put(RPConstant.EXTRA_SPONSOR_NAME, getResources().getString(R.string.ytx_red_packet));//红包sponsor name
-            jsonObject.put(RPConstant.EXTRA_RED_PACKET_GREETING, greetings);//祝福语
-            jsonObject.put(RPConstant.EXTRA_RED_PACKET_ID, moneyID);//红包id
+            jsonObject.put(RPConstant.MESSAGE_ATTR_RED_PACKET_SPONSOR_NAME, getResources().getString(R.string.ytx_red_packet));//红包sponsor name
+            jsonObject.put(RPConstant.MESSAGE_ATTR_RED_PACKET_GREETING, greetings);//祝福语
+            jsonObject.put(RPConstant.MESSAGE_ATTR_RED_PACKET_ID, moneyID);//红包id
             jsonObject.put(RPConstant.MESSAGE_ATTR_RED_PACKET_TYPE, redPacketType);//红包类型，是否是专属红包
             jsonObject.put(RPConstant.MESSAGE_ATTR_SPECIAL_RECEIVER_ID, specialReceiveId);//指定接收者
             // 组建一个待发送的ECMessage
@@ -2761,6 +2761,7 @@ public class ChattingFragment extends CCPFragment implements
             e.printStackTrace();
         }
     }
+
     /**
      * 发送转账消息
      */
@@ -2772,8 +2773,8 @@ public class ChattingFragment extends CCPFragment implements
             String text = "[" + transfer + "]" + transfer + money + "元";
             JSONObject jsonObject = new JSONObject();
             jsonObject.put(RPConstant.MESSAGE_ATTR_IS_TRANSFER_PACKET_MESSAGE, true);//是否是转账消息
-            jsonObject.put(RPConstant.EXTRA_TRANSFER_AMOUNT, money);//转账金额
-            jsonObject.put(RPConstant.EXTRA_TRANSFER_PACKET_TIME, time);//转账时间
+            jsonObject.put(RPConstant.MESSAGE_ATTR_TRANSFER_AMOUNT, money);//转账金额
+            jsonObject.put(RPConstant.MESSAGE_ATTR_TRANSFER_TIME, time);//转账时间
             // 组建一个待发送的ECMessage
             ECMessage msg = ECMessage.createECMessage(ECMessage.Type.TXT);
             // 设置消息接收者
@@ -2880,10 +2881,10 @@ public class ChattingFragment extends CCPFragment implements
             String toNickname = clientUser.getUserName();
             toNickname = TextUtils.isEmpty(toNickname) ? toUserId : toNickname;
             jsonObject.put(RPConstant.MESSAGE_ATTR_IS_RED_PACKET_ACK_MESSAGE, true);//是否是红包领取消息
-            jsonObject.put(RPConstant.EXTRA_RED_PACKET_SENDER_NAME, senderNickName);//发送者昵称
-            jsonObject.put(RPConstant.EXTRA_RED_PACKET_SENDER_ID, senderId);//发送者id
-            jsonObject.put(RPConstant.EXTRA_RED_PACKET_RECEIVER_NAME, toNickname);//接收者昵称
-            jsonObject.put(RPConstant.EXTRA_RED_PACKET_RECEIVER_ID, toUserId);//接收者id
+            jsonObject.put(RPConstant.MESSAGE_ATTR_RED_PACKET_SENDER_NICKNAME, senderNickName);//发送者昵称
+            jsonObject.put(RPConstant.MESSAGE_ATTR_RED_PACKET_SENDER_ID, senderId);//发送者id
+            jsonObject.put(RPConstant.MESSAGE_ATTR_RED_PACKET_RECEIVER_NICKNAME, toNickname);//接收者昵称
+            jsonObject.put(RPConstant.MESSAGE_ATTR_RED_PACKET_RECEIVER_ID, toUserId);//接收者id
             String text;
             if (senderId.equals(clientUser.getUserId())) {
                 text = this.getResources().getString(R.string.money_msg_take_money);

@@ -46,12 +46,12 @@ public class RedPacketRxRow extends BaseChattingRow {
             JSONObject jsonObject = RedPacketUtil.getInstance().isRedPacketMessage(message);
             if (jsonObject != null) {
                 //清除文本框，和加载progressdialog
-                String greeting = jsonObject.optString(RPConstant.EXTRA_RED_PACKET_GREETING);
-                String sponsorName = jsonObject.optString(RPConstant.EXTRA_SPONSOR_NAME);
+                String greeting = jsonObject.optString(RPConstant.MESSAGE_ATTR_RED_PACKET_GREETING);
+                String sponsorName = jsonObject.optString(RPConstant.MESSAGE_ATTR_RED_PACKET_SPONSOR_NAME);
                 String packetType = jsonObject.optString(RPConstant.MESSAGE_ATTR_RED_PACKET_TYPE);
                 holder.getGreetingTv().setText(greeting);
                 holder.getSponsorNameTv().setText(sponsorName);
-                if (!TextUtils.isEmpty(packetType) && TextUtils.equals(packetType, RPConstant.GROUP_RED_PACKET_TYPE_EXCLUSIVE)) {
+                if (!TextUtils.isEmpty(packetType) && TextUtils.equals(packetType, RPConstant.RED_PACKET_TYPE_GROUP_EXCLUSIVE)) {
                     holder.getPacketTypeTv().setVisibility(View.VISIBLE);
                     holder.getPacketTypeTv().setText(context.getResources().getString(R.string.exclusive_red_packet));
                 } else {

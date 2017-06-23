@@ -44,7 +44,7 @@ public class TransferTxRow extends BaseChattingRow {
             JSONObject jsonObject = RedPacketUtil.getInstance().isTransferMsg(message);
             if (jsonObject != null) {
                 //清除文本框，和加载progressdialog
-                String amount = jsonObject.optString(RPConstant.EXTRA_TRANSFER_AMOUNT);
+                String amount = jsonObject.optString(RPConstant.MESSAGE_ATTR_TRANSFER_AMOUNT);
                 holder.getAmountTv().setText(amount + "元");
                 ViewHolderTag holderTag = ViewHolderTag.createTag(message, ViewHolderTag.TagType.TAG_IM_TRANSFER, position);
                 View.OnClickListener onClickListener = ((ChattingActivity) context).mChattingFragment.getChattingAdapter().getOnClickListener();

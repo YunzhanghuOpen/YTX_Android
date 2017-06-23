@@ -91,9 +91,9 @@ public class ECApplication extends Application {
                 fromUserId = TextUtils.isEmpty(fromUserId) ? "none" : fromUserId;
                 fromNickname = TextUtils.isEmpty(fromNickname) ? fromUserId : fromNickname;
                 RedPacketInfo redPacketInfo = new RedPacketInfo();
-                redPacketInfo.fromUserId = fromUserId;
-                redPacketInfo.fromAvatarUrl = fromAvatarUrl;
-                redPacketInfo.fromNickName = fromNickname;
+                redPacketInfo.currentUserId = fromUserId;
+                redPacketInfo.currentAvatarUrl = fromAvatarUrl;
+                redPacketInfo.currentNickname = fromNickname;
                 return redPacketInfo;
             }
         });

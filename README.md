@@ -49,7 +49,7 @@ allprojects {
 compile project(':redpacketlibrary')
 //支付宝UI开源
 compile project(':redpacketui-open')
-```
+```    
 * 在redpacketlibrary的build.gradle中
 
 * 钱包版配置如下
@@ -58,7 +58,8 @@ compile project(':redpacketui-open')
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:support-v4:23.0.1'
-    compile 'com.yunzhanghu.redpacket:redpacket-wallet:3.4.5'
+    compile 'com.android.support:recyclerview-v7:25.3.1'
+    compile 'com.yunzhanghu.redpacket:redpacket-wallet:3.5.0'
 }
 ```
 * 支付宝版配置如下
@@ -68,7 +69,7 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:support-v4:23.0.1'
     compile 'com.android.support:recyclerview-v7:25.3.1'
-    compile 'com.yunzhanghu.redpacket:redpacket-alipay:1.1.2'
+    compile 'com.yunzhanghu.redpacket:redpacket-alipay:2.0.1'
 }
 ```
 ## 初始化红包SDK
@@ -85,12 +86,6 @@ RedPacket.getInstance().initRedPacket(this, RPConstant.AUTH_METHOD_YTX, new RPIn
                 @Override
                 public RedPacketInfo initCurrentUserSync() {
                      // 这里需要同步设置当前用户id、昵称和头像url
-                   //钱包版
-                   RedPacketInfo redPacketInfo = new RedPacketInfo();
-                   redPacketInfo.fromUserId = "yunzhanghu";
-                   redPacketInfo.fromAvatarUrl = "testURL";
-                   redPacketInfo.fromNickName = "yunzhanghu001";
-                   //支付宝版 Since 2.0.0
                    RedPacketInfo redPacketInfo = new RedPacketInfo();
                    redPacketInfo.currentUserId = "yunzhanghu";
                    redPacketInfo.currentAvatarUrl = "testURL";
@@ -103,16 +98,16 @@ RedPacket.getInstance().setDebugMode(true);
 ```
 * **initRedPacket(context, authMethod, callback) 参数说明**
 
-| 参数名称       | 参数类型                    | 参数说明  | 必填         |
+| 参数名称       | 参数类型             | 参数说明  | 必填         |
 | ---------- | ----------------------- | ----- | ---------- |
 | context    | Context                 | 上下文   | 是          |
 | authMethod | String                  | 授权类型  | 是**（见注1）** |
-| callback   | RPInitRedPacketCallback | 初始化接口 | 是          |
+| callback   | RPInitRedPacketCallback | 初始化接口 | 是          |  
 
 * **RPInitRedPacketCallback 接口说明**
 
 | **initTokenData(RPValueCallback<TokenData> callback)** |
-| :--------------------------------------- |
+| :---------------------------------------- |
 | **该方法用于初始化TokenData，在进入红包相关页面、红包Token不存在或红包Token过期时调用。容联云SDK已实现，开发者不需要实现** |
 | **initCurrentUserSync()**                |
 | **该方法用于初始化当前用户信息，在进入红包相关页面时调用，需同步获取。**   |
@@ -277,24 +272,15 @@ public void onClick(View v) {
         RedPacketInfo redPacketInfo = new RedPacketInfo();
         redPacketInfo.redPacketId = jsonRedPacket.optString(RPConstant.MESSAGE_ATTR_RED_PACKET_ID);
 	redPacketInfo.redPacketType = jsonRedPacket.optString(RPConstant.MESSAGE_ATTR_RED_PACKET_TYPE);
-        if (iMessage.getDirection() == Direction.RECEIVE) {//接收者
-             redPacketInfo.messageDirect = RPConstant.MESSAGE_DIRECT_RECEIVE;
-        } else {//发送者
-              redPacketInfo.messageDirect = RPConstant.MESSAGE_DIRECT_SEND;
-        }
-        if (mContext.mChattingFragment.isPeerChat()) {//群聊
-             redPacketInfo.chatType = RPConstant.CHAT_TYPE_GROUP;
-        } else {//单聊
-             redPacketInfo.chatType = RPConstant.CHAT_TYPE_SINGLE;
-        }
 	//mContext为FragmentActivity
 	//钱包版
         RPRedPacketUtil.getInstance().openRedPacket(redPacketInfo, mContext, new RPRedPacketUtil.RPOpenPacketCallback() {
-                    @Override
-                    public void onSuccess(String senderId, String senderNickname, String myAmount) {
-                        mContext.mChattingFragment.sendRedPacketAckMessage(senderId, senderNickname);
-                    }
+                  @Override
+                    public void onSuccess(RedPacketInfo redPacketInfo) {
+                        mContext.mChattingFragment.sendRedPacketAckMessage(redPacketInfo.senderId, redPacketInfo.senderNickname);
 
+                    }
+		    
                     @Override
                     public void showLoading() {
                         progressDialog.show();
@@ -347,9 +333,9 @@ private class OnOnChattingPanelImpl implements CCPChattingFooter2.OnChattingPane
   @Override
     public void OnSelectTransferRequest() {
       RedPacketInfo redPacketInfo = new RedPacketInfo();
-      redPacketInfo.toUserId = mRecipients;
-      redPacketInfo.toNickName = mUsername;
-      redPacketInfo.toAvatarUrl = "none";//容联云没有头像url，开发者设置自己app的头像url
+      redPacketInfo.receiverId = mRecipients;
+      redPacketInfo.receiverNickname = mUsername;
+      redPacketInfo.receiverAvatarUrl = "none";//容联云没有头像url，开发者设置自己app的头像url
       RPRedPacketUtil.getInstance().startRedPacket(getActivity(), RPConstant.RP_ITEM_TYPE_TRANSFER, redPacketInfo, new    RPSendPacketCallback() {
             @Override
             public void onSendPacketSuccess(RedPacketInfo redPacketInfo) {
@@ -371,20 +357,20 @@ public void onClick(View v) {
   switch (holder.type) {
   case ViewHolderTag.TagType.TAG_IM_TRANSFER:
        //打开转账
-       JSONObject jsonTransfer = RedPacketUtil.getInstance().isTransferMsg(iMessage);
-       String amount = jsonTransfer.optString(RPConstant.EXTRA_TRANSFER_AMOUNT);//转账金额
-       String time = jsonTransfer.optString(RPConstant.EXTRA_TRANSFER_PACKET_TIME);//转账时间
-       String messageDirect;
-       if (iMessage.getDirection() == ECMessage.Direction.RECEIVE) {//接受者
-             messageDirect = RPConstant.MESSAGE_DIRECT_RECEIVE;
-        } else {//发送者
-             messageDirect = RPConstant.MESSAGE_DIRECT_SEND;
+        JSONObject jsonTransfer = RedPacketUtil.getInstance().isTransferMsg(iMessage);
+        String amount = jsonTransfer.optString(RPConstant.MESSAGE_ATTR_TRANSFER_AMOUNT);//转账金额
+        String time = jsonTransfer.optString(RPConstant.MESSAGE_ATTR_TRANSFER_TIME);//转账时间
+        String messageDirect;
+        if (iMessage.getDirection() == ECMessage.Direction.RECEIVE) {//接受者
+               messageDirect = RPConstant.MESSAGE_DIRECT_RECEIVE;
+           } else {//发送者
+               messageDirect = RPConstant.MESSAGE_DIRECT_SEND;
         }
         RedPacketInfo data = new RedPacketInfo();
         data.messageDirect = messageDirect;
         data.redPacketAmount = amount;//转账金额
         data.transferTime = time;//转账时间
-        RPRedPacketUtil.getInstance().openTransferPacket(mContext,data);
+       RPRedPacketUtil.getInstance().openTransferPacket(mContext, data);
         break;
         default:
            break;

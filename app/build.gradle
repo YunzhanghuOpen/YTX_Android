@@ -8,6 +8,7 @@ android {
         minSdkVersion 11
         versionCode 18
         versionName "5.3.1r"
+        resValue "string", "rp_provider_authorities_name", "${applicationId}.redpacket.fileProvider"
     }
     buildTypes {
         release {
